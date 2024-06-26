@@ -4,6 +4,7 @@ local subdir = 'TIGER';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.proprietary;
 
@@ -19,7 +20,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'TIGER: US Census Block Groups (BG)',
+  title: 'TIGER: US Census Block Groups (BG) 2020',
   version: '2020',
   'gee:type': ee_const.gee_type.table,
   description: |||
@@ -37,7 +38,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.example(id, basename + '_FeatureView'),
+    ee.link.example(id, subdir, basename + '_FeatureView'),
   ],
   keywords: [
     'census',
@@ -63,13 +64,13 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'ALAND',
         description: 'Land Area (square meters)',
         type: ee_const.var_type.double,
-        units: 'm^2',
+        units: units.square_m,
       },
       {
         name: 'AWATER',
         description: 'Water Area (square meters)',
         type: ee_const.var_type.double,
-        units: 'm^2',
+        units: units.square_m,
       },
       {
         name: 'BLKGRPCE',

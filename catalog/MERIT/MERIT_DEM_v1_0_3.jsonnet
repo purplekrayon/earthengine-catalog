@@ -11,9 +11,6 @@ local license = spdx.odbl_1_0;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -96,13 +93,13 @@ local self_url = catalog_subdir_url + base_filename;
             ],
             palette: [
               '000000',
-              '478FCD',
-              '86C58E',
-              'AFC35E',
-              '8F7131',
-              'B78D4F',
-              'E2B8A6',
-              'FFFFFF',
+              '478fcd',
+              '86c58e',
+              'afc35e',
+              '8f7131',
+              'b78d4f',
+              'e2b8a6',
+              'ffffff',
             ],
             bands: [
               'dem',

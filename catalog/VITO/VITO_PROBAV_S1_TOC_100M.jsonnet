@@ -1,20 +1,17 @@
 local id = 'VITO/PROBAV/S1_TOC_100M';
-local successor_id = 'VITO/PROBAV/C1/S1_TOC_100M';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/TOC_100M_versions.libsonnet';
+
 local subdir = 'VITO';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 
 local license = spdx.proprietary;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local successor_basename = std.strReplace(successor_id, '/', '_');
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -26,7 +23,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   id: id,
   title: 'PROBA-V C0 Top Of Canopy Daily Synthesis 100m [deprecated]',
-  version: 'C0',
+  version: version,
   deprecated: true,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
@@ -40,17 +37,14 @@ local self_url = catalog_subdir_url + base_filename;
     image from nadir observations every 5 days. These images are later
     composited to produce this daily synthesis dataset. The description of
     the compositing and atmospheric correction procedures can be found in
-    the [user manual](https://proba-v.vgt.vito.be/sites/proba-v.vgt.vito.be/files/products_user_manual.pdf).
+    the [user manual](https://publications.vito.be/2017-1333-probav-products-user-manual.pdf).
 
     The reflectances provided in this dataset are presented as Digital Count
     Numbers (DN) and must be converted according to the guidelines in
-    Section 4.6.1 of the [user manual](https://proba-v.vgt.vito.be/sites/proba-v.vgt.vito.be/files/products_user_manual.pdf).
+    Section 4.6.1 of the [user manual](https://publications.vito.be/2017-1333-probav-products-user-manual.pdf).
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id) + [
-    ee.link.successor(
-        successor_id, catalog_subdir_url + successor_basename + '.json'),
-  ],
+  links: ee.standardLinks(subdir, id) + version_config.version_links,
   keywords: [
     'esa',
     'multispectral',
@@ -62,7 +56,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   providers: [
     ee.producer_provider('Vito / ESA', 'https://proba-v.vgt.vito.be/'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent_global('2013-10-17T00:00:00Z', '2016-12-14T00:00:00Z'),
   summaries: {
@@ -177,32 +171,32 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'SZA',
         description: 'Solar zenith angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'SAA',
         description: 'Solar azimuth angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'SWIRVAA',
         description: 'Viewing azimuth angles SWIR detector',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'SWIRVZA',
         description: 'Viewing zenith angle SWIR detector',
-        'gee:units': 'Degree',
+        'gee:units': units.degree,
       },
       {
         name: 'VNIRVAA',
         description: 'Viewing azimuth angle VNIR detector',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'VNIRVZA',
         description: 'Viewing zenith angle VNIR detector',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'SM',
@@ -318,7 +312,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'TIME',
         description: 'Time elapsed since the start of image collection of this mosaic',
-        'gee:units': 'Minutes',
+        'gee:units': units.minute,
       },
     ],
     'gee:visualizations': [

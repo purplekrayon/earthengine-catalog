@@ -1,3 +1,5 @@
+local units = import 'units.libsonnet';
+
 {
   summaries: {
     gsd: [
@@ -454,19 +456,19 @@
       {
         name: 'SolarZenith',
         description: 'MODIS Solar zenith angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         'gee:scale': 0.01,
       },
       {
         name: 'ViewZenith',
         description: 'MODIS view zenith angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         'gee:scale': 0.01,
       },
       {
         name: 'RelativeAzimuth',
         description: 'MODIS relative azimuth angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         'gee:scale': 0.01,
       },
       {
@@ -699,11 +701,7 @@
     'gee:visualizations': [
       {
         display_name: 'True Color',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: 6.746, lat: 46.529, zoom: 2},
         image_visualization: {
           band_vis: {
             min: [

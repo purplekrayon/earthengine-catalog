@@ -20,7 +20,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'Global PALSAR-2/PALSAR Forest/Non-Forest Map',
+  title: 'Global 4-class PALSAR-2/PALSAR Forest/Non-Forest Map',
   'gee:type': ee_const.gee_type.image_collection,
   version: '2.0.0a',
   description: |||
@@ -80,22 +80,22 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         'gee:classes': [
           {
             value: 1,
-            color: '00B200',
+            color: '00b200',
             description: 'Dense Forest',
           },
           {
             value: 2,
-            color: '83EF62',
+            color: '83ef62',
             description: 'Non-dense Forest',
           },
           {
             value: 3,
-            color: 'FFFF99',
+            color: 'ffff99',
             description: 'Non-Forest',
           },
           {
             value: 4,
-            color: '0000FF',
+            color: '0000ff',
             description: 'Water',
           },
         ],
@@ -118,10 +118,10 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               4.0,
             ],
             palette: [
-              '00B200',
-              '83EF62',
-              'FFFF99',
-              '0000FF',
+              '00b200',
+              '83ef62',
+              'ffff99',
+              '0000ff',
             ],
             bands: [
               'fnf',

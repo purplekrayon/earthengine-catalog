@@ -70,13 +70,13 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'AzimuthPixelSpacing',
         description: 'Azimuth pixel spacing.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'AzimuthResolution',
         description: 'Azimuth resolution.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'BeamID',
@@ -102,25 +102,25 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'EasternBias',
         description: 'Bias of easting error.',
         type: ee_const.var_type.double,
-        units: 'degrees',
+        units: units.degree,
       },
       {
         name: 'EasternSTDev',
         description: 'Standard deviation of easting error.',
         type: ee_const.var_type.double,
-        units: 'degree',
+        units: units.degree,
       },
       {
         name: 'Easting_LR',
         description: 'Easting of Lower Right of Product.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'Easting_UL',
         description: 'Easting of upper left of product.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'Estimates_HH',
@@ -160,13 +160,13 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'IncAngleFarRange',
         description: 'Incident angle in far range.',
         type: ee_const.var_type.double,
-        units: 'degree',
+        units: units.degree,
       },
       {
         name: 'IncAngleNearRange',
         description: 'Incident angle in near range.',
         type: ee_const.var_type.double,
-        units: 'degree',
+        units: units.degree,
       },
       {
         name: 'IonosphericDelayCorrectionApplied',
@@ -198,25 +198,25 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'NorthernBias',
         description: 'Bias of northing error.',
         type: ee_const.var_type.double,
-        units: 'degree',
+        units: units.degree,
       },
       {
         name: 'NorthernSTDev',
         description: 'Standard deviation of northing error.',
         type: ee_const.var_type.double,
-        units: 'degree',
+        units: units.degree,
       },
       {
         name: 'Northing_LR',
         description: 'Northing of lower right of product.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'Northing_UL',
         description: 'Northing of upper left of product.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'ObservationMode',
@@ -249,13 +249,13 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'ProductColumnSpacing',
         description: 'Product column spacing.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'ProductRowSpacing',
         description: 'Product row spacing.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'Product_Version',
@@ -276,26 +276,26 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'RadarCenterFrequency',
         description: 'Center frequency.',
         type: ee_const.var_type.double,
-        units: 'GHz',
+        units: units.giga_hertz,
       },
       {
         name: 'RangePixelSpacing',
         description: 'Range pixel spacing.',
         type: ee_const.var_type.double,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'RangeResolution',
         description: 'Range resolution.',
         type: ee_const.var_type.int,
-        units: units.meters,
+        units: units.meter,
       },
       {
         name: 'SlantRangeCorrection',
         description: |||
             The correction for each scan described from the first scan.
         |||,
-        units: units.meters,
+        units: units.meter,
         type: ee_const.var_type.int_list,
       },
       {
@@ -351,7 +351,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           direction and the normal of the slope.
         |||,
         'gee:scale': 0.01,
-        'gee:units': 'degree'
+        'gee:units': units.degree,
       },
       {
         // TODO(simonf): we should add some basic SAR guide that explains

@@ -10,9 +10,6 @@ local license = spdx.proprietary;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -54,7 +51,7 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.example(id, basename + '_FeatureView'),
+    ee.link.example(id, subdir, basename + '_FeatureView'),
   ],
   keywords: [
     'boundaries',
@@ -279,7 +276,7 @@ local self_url = catalog_subdir_url + base_filename;
           zoom: 4,
         },
         table_visualization: {
-          color: '4285F4',
+          color: '4285f4',
           point_size: 3,
         },
       },

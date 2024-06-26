@@ -23,7 +23,8 @@ For each entry in the 'eo:band' list:
 - 'full_width_half_max' (FWHM) is the width of the band, as measured at half
   the maximum transmission, in micrometers (μm)
 - 'solar_illumination' is not allowed
-- 'gsd' is the ground separation distance of pixels in meters (m)
+- 'gsd' is the ground sample distance of pixels in meters (m)
+  - https://en.wikipedia.org/wiki/Ground_sample_distance
   - Commonly, but incorrectly called 'resolution'
   - There are two ways of gsd can be specified:
     1. gsd under summaries that is a list of 1 or 2 values
@@ -85,6 +86,7 @@ import re
 from typing import Iterator
 
 from checker import stac
+from checker import units
 
 EXTENSION_VERSION = '1.0.0'
 
@@ -171,39 +173,66 @@ GSD_EXCEPTIONS = frozenset({
 
 MIN_DESCRIPTION_LEN = 3
 MAX_DESCRIPTION_LEN = 1600
-MAX_BANDS = 500
+MAX_BANDS = 2000
 MAX_GSD = 3e5
 POLARIZATIONS = frozenset({'HH', 'HV', 'VH', 'VV'})
 
-UNITS = frozenset({
-    '%', '% (kg / kg)', '(kg/m^3)/(m/s)', '-', '1.0e15 molec cm-2',
-    'Alfalfa, mm', 'Class', 'Coefficient of Variation', 'DN', 'DU', 'Day',
-    'Degree', 'Degrees', 'Degrees clockwise from North', 'Dimensionless',
-    'Dobson units', 'Dobsons', 'Equivalent gauges per 2.5 degree box', 'Hours',
-    'J/kg', 'J/m2', 'J/m^2', 'J/m^2/day', 'Julian Day', 'K', 'Kelvin',
-    'MJ m^-2 day^-1', 'MW', 'Megawatts', 'Mg C/ha', 'Mg ha^-1', 'Mg/ha',
-    'Minutes', 'N/m^2', 'NFDRS fire danger index', 'Number of people/ha',
-    'Number of upstream pixels', 'Number per pixel', 'Pa', 'Pa/s', 'Percent',
-    'Quality Flag', 'Reflectance factor', 'Seconds', 'W m**-2',
-    'W m-2', 'W m^-2 sr^-1 μm^-1', 'W/(m^2*sr*um)/ DN', 'W/m^2',
-    'W/m^2 SR&mu;m', 'cm', 'cm^3/cm^3', 'cmol(+)/kg', 'cms', 'count',
-    'counts/day', 'dB', 'days', 'deg true', 'degree', 'degree C', 'degrees',
-    'dobsons', 'fraction', 'g / kg', 'g/cc', 'g/cm^3', 'g/kg', 'g/m^2', 'g/m²',
-    'gC m-2 d-1', 'gigagrams', 'gpm', 'grass, mm', 'hPa', 'ha', 'hours',
-    'hours/sq. km', 'index', 'kPa', 'kg / m3', 'kg kg-1', 'kg kg^-1',
-    'kg m**-2', 'kg m**-3', 'kg m-2', 'kg m-2 s-1', 'kg m-3', 'kg m^-2',
-    'kg m^-2 s^-1', 'kg m^-2 s^-2', 'kg*C/m^2', 'kg*C/m^2/16-day',
-    'kg*C/m^2/8-day', 'kg/(m^2)', 'kg/(m^2*s)', 'kg/(m^2/s)', 'kg/(m^3)',
-    'kg/kg', 'kg/m/s', 'kg/m2', 'kg/m^2', 'kg/m^2/8day', 'kg/m^2/s',
-    'kg/m^2/s^1', 'kg/m^2s', 'kg/m^3', 'km', 'km^2', 'm',
-    'm of water equivalent', 'm s-1', 'm s^-1', 'm/s', 'm/s^2', 'm2 m^-2',
-    'm3/m3', 'mW cm-2 &mu;m-1 sr-1', 'm^2', 'm^2 s-2', 'm^2/m^2', 'm^2/m^3',
-    'm^3 m-3', 'm^3 m^-3', 'm^3/m^3', 'meq/100g', 'meter/year', 'mg m-3',
-    'mg/m^3', 'millibars', 'min. into half hour', 'minutes', 'minutes/meter',
-    'mm', 'mm d-1', 'mm, daily total', 'mm/day', 'mm/hr', 'mm/pentad',
-    'mol mol-1', 'mol/m^2', 'mol/mol', 'molec cm-2 s-1', 'ms',
-    'nanoWatts/cm2/sr', 'occurrence', 'percent', 'pixels', 'ppm', 'psu',
-    'radians', 'seconds', 'sq. meter/sq. meter', 'sr-1', 'ug m-3', '°C', 'μm',
+# TODO(b/198646525): Migrate these units to ../units.py as they units get
+# added to units.libsonnet.
+UNITS = units.UNITS.union({
+    '% (kg / kg)',
+    '(kg/m^3)/(m/s)',
+    '1.0e15 molec cm-2',
+    'Coefficient of Variation',
+    'Equivalent gauges per 2.5 degree box',
+    'J/m^2/day',
+    'Julian Day',
+    'MJ m^-2 day^-1',
+    'NFDRS fire danger index',
+    'Number of people/ha',
+    'Number of upstream pixels',
+    'Number per pixel',
+    'Pa/s',
+    'Quality Flag',
+    'Reflectance factor',
+    'W m^-2 sr^-1 &micro;m^-1',
+    'W/(m^2*sr*um)/ DN',
+    'W/m^2 SR&mu;m',
+    'cmol(+)/kg',
+    'g/cm^3',
+    'g/kg',  # per mille
+    'g/m^2',
+    'gC m-2 d-1',
+    'gpm',
+    'index',
+    'kg m^-2 s^-2',
+    'kg*C/m^2',
+    'kg*C/m^2/16-day',
+    'kg*C/m^2/8-day',
+    'kg/m/s',
+    'kg/m^2/8day',
+    'm of water equivalent',
+    'mW cm-2 &mu;m-1 sr-1',
+    'm^2',
+    'm^2 s-2',
+    'm^2/m^3',
+    'm^3',
+    'meq/100g',
+    'meter/year',
+    'min. into half hour',
+    'minutes/meter',
+    'mm, daily total',
+    'mm/hr',
+    'mm/pentad',
+    'mol/m^2',
+    'molec cm-2 s-1',
+    'ms',
+    'occurrence',
+    'ppm',
+    'ppm m',
+    'seconds',
+    'sr-1',
+    'ug m-3',
 })
 
 
@@ -370,7 +399,6 @@ class Check(stac.NodeCheck):
       if not isinstance(description, str):
         yield cls.new_issue(node, f'{name} {DESCRIPTION} must be a str')
       else:
-        # TODO(schwehr): Be more strict about the contents of the description
         if len(description) < MIN_DESCRIPTION_LEN:
           yield cls.new_issue(
               node, f'{name} {DESCRIPTION} too short: {len(description)}')
@@ -384,7 +412,7 @@ class Check(stac.NodeCheck):
           yield cls.new_issue(
               node, f'{name} {CENTER_WAVELENGTH} must be a number')
         else:
-          if center_wavelength < 0 or center_wavelength > 15:
+          if not 0 < center_wavelength < 15:
             yield cls.new_issue(
                 node, f'{name} {CENTER_WAVELENGTH} must in (0, 15) μm')
 
@@ -394,7 +422,7 @@ class Check(stac.NodeCheck):
           yield cls.new_issue(
               node, f'{name} {FULL_WIDTH_HALF_MAX} must be a number')
         else:
-          if full_width_half_max < 0 or full_width_half_max > 0.15:
+          if not 0 < full_width_half_max < 0.15:
             yield cls.new_issue(
                 node, f'{name} {FULL_WIDTH_HALF_MAX} must in (0, 0.15) μm')
 
@@ -445,11 +473,12 @@ class Check(stac.NodeCheck):
                 ', '.join(sorted(POLARIZATIONS)))
 
       if GEE_UNITS in band:
-        units = band[GEE_UNITS]
-        if not isinstance(units, str):
+        gee_units = band[GEE_UNITS]
+        if not isinstance(gee_units, str):
           yield cls.new_issue(node, f'{name} {GEE_UNITS} must be a str')
-        elif units not in UNITS:
-          yield cls.new_issue(node, f'{name} {GEE_UNITS} not known: {units}')
+        elif gee_units not in UNITS:
+          yield cls.new_issue(
+              node, f'{name} {GEE_UNITS} not known: {gee_units}')
 
       if GEE_WAVELENGTH in band:
         wavelength = band[GEE_WAVELENGTH]

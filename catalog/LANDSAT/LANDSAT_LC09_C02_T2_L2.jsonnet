@@ -4,16 +4,17 @@ local subdir = 'LANDSAT';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
-
-local license = spdx.proprietary;
 local template = import 'templates/LC08_C02_L2.libsonnet';
+local notes = import 'templates/LANDSAT_L2.libsonnet';
+
+local license = spdx.proprietary {
+  reference: 'https://www.usgs.gov/centers/eros/data-citation',
+};
 
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
 local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -49,22 +50,10 @@ local self_url = catalog_subdir_url + base_filename;
 
     [Additional documentation and usage examples.](/earth-engine/guides/landsat)
 
-    Data provider notes:
-
-    * Data products must contain both optical and thermal data to be
-      successfully processed to surface temperature, as ASTER NDVI is
-      required to temporally adjust the ASTER GED product to the target Landsat
-      scene. Therefore, night time acquisitions cannot be processed to
-      surface temperature.
-
-    * A known error exists in the surface temperature retrievals relative
-      to clouds and possibly cloud shadows. The characterization of these
-      issues has been documented by
-      [Cook et al., (2014)](https://doi.org/10.3390/rs61111244).
-  |||,
+  ||| + notes.description,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.license('https://www.usgs.gov/centers/eros/data-citation'),
+    ee.link.license(license.reference),
   ],
   keywords: [
     'cfmask',

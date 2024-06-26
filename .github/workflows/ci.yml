@@ -7,10 +7,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Python 3.9
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
       - name: Install dependencies
         run: |
           pip install absl-py
@@ -26,8 +26,8 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ env.cache-name }}-development
       - uses: actions/checkout@v3
       - name: Build
-        run: bazel build //...
+        run: bazel build  --define jsonnet_port=cpp //...
       - name: Test Checker
-        run: bazel test --test_output=errors //...
+        run: bazel test  --define jsonnet_port=cpp --test_output=errors //...
       - name: Checker
         run: bazel-bin/checker/ee_stac_check

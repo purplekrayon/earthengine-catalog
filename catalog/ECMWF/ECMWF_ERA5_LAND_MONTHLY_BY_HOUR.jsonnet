@@ -1,6 +1,7 @@
 local id = 'ECMWF/ERA5_LAND/MONTHLY_BY_HOUR';
 local subdir = 'ECMWF';
 
+local cds_notice = import 'templates/cds_notice.libsonnet';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
@@ -22,7 +23,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   id: id,
   title: 'ERA5-Land Monthly Averaged by Hour of Day - ECMWF Climate Reanalysis',
   'gee:type': ee_const.gee_type.image_collection,
-  description: |||
+  description: cds_notice.body + |||
+
     ERA5-Land is a reanalysis dataset providing a consistent view of the evolution of land variables
     over several decades at an enhanced resolution compared to ERA5. ERA5-Land has been produced by
     replaying the land component of the ECMWF ERA5 climate reanalysis. Reanalysis combines model
@@ -42,7 +44,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     one for each of the accumulation bands, with the hourly values computed as the difference
     between two consecutive forecast steps.
 
-    ERA5-Land data is available from 1981 to three months from real-time. More information
+    ERA5-Land data is available from 1950 to three months from real-time. More information
     can be found at the [Copernicus Climate Data Store](https://cds.climate.copernicus.eu).
   |||,
   license: license.id,
@@ -71,7 +73,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee.producer_provider('Climate Data Store', 'https://cds.climate.copernicus.eu/cdsapp'),
     ee.host_provider(self_ee_catalog_url),
   ],
-  extent: ee.extent_global('1981-01-01T01:00:00Z', null),
+  extent: ee.extent_global('1950-01-01T01:00:00Z', null),
   summaries: {
     'gee:schema': [
       {
@@ -157,7 +159,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           inland water bodies (lakes, reservoirs and rivers) and coastal water. A single ice layer is
           represented. This parameter is the thickness of that ice layer.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'lake_ice_temperature',
@@ -180,7 +182,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           near-surface) water is greater than that of the water below. Mixing can also occur through the
           action of wind on the surface of the lake.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'lake_mix_layer_temperature',
@@ -239,12 +241,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           model represents snow as a single additional layer over the uppermost soil level. The snow may
           cover all or part of the grid box.
         |||,
-        'gee:units': 'kg/m^3',
+        'gee:units': units.density_si,
       },
       {
         name: 'snow_depth',
         description: 'Instantaneous grib-box average of the snow thickness on the ground (excluding snow on canopy).',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'snow_depth_water_equivalent',
@@ -307,22 +309,22 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           surface is at 0 cm. The volumetric soil water is associated with the soil texture (or
           classification), soil depth, and the underlying groundwater level.
         |||,
-        'gee:units': 'm3/m3',
+        'gee:units': units.volume_fraction,
       },
       {
         name: 'volumetric_soil_water_layer_2',
         description: 'Volume of water in soil layer 2 (7 -28 cm) of the ECMWF Integrated Forecasting System.',
-        'gee:units': 'm3/m3',
+        'gee:units': units.volume_fraction,
       },
       {
         name: 'volumetric_soil_water_layer_3',
         description: 'Volume of water in soil layer 3 (28-100 cm) of the ECMWF Integrated Forecasting System.',
-        'gee:units': 'm3/m3',
+        'gee:units': units.volume_fraction,
       },
       {
         name: 'volumetric_soil_water_layer_4',
         description: 'Volume of water in soil layer 4 (100-289 cm) of the ECMWF Integrated Forecasting System.',
-        'gee:units': 'm3/m3',
+        'gee:units': units.volume_fraction,
       },
       {
         name: 'forecast_albedo',
@@ -347,7 +349,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           accumulated from the beginning of the forecast time to the end of the forecast step. By model
           convention, downward fluxes are positive.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_net_solar_radiation',
@@ -363,7 +365,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           (W m-2), the accumulated values should be divided by the accumulation period expressed in
           seconds. The ECMWF convention for vertical fluxes is positive downwards.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_net_thermal_radiation',
@@ -371,7 +373,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           Net thermal radiation at the surface. Accumulated field from the beginning of the forecast
           time to the end of the forecast step. By model convention downward fluxes are positive.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_sensible_heat_flux',
@@ -387,7 +389,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           accumulated values should be divided by the accumulation period expressed in seconds. The ECMWF
           convention for vertical fluxes is positive downwards.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_solar_radiation_downwards',
@@ -406,7 +408,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           (W m-2), the accumulated values should be divided by the accumulation period expressed in
           seconds. The ECMWF convention for vertical fluxes is positive downwards.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_thermal_radiation_downwards',
@@ -420,7 +422,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           square meter (W m-2), the accumulated values should be divided by the accumulation period
           expressed in seconds. The ECMWF convention for vertical fluxes is positive downwards.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'evaporation_from_bare_soil',
@@ -469,7 +471,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           results in arid conditions due to too strong evaporation forced by dry air. This variable is
           accumulated from the beginning of the forecast time to the end of the forecast step.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'runoff',
@@ -487,7 +489,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           flood. More information about how runoff is calculated is given in the IFS Physical Processes
           documentation.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'snow_evaporation',
@@ -513,7 +515,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           soil, and can, for example, be used as an indicator of drought or flood. More information about
           how runoff is calculated is given in the IFS Physical Processes documentation.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'surface_runoff',
@@ -531,7 +533,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           flood. More information about how runoff is calculated is given in the IFS Physical Processes
           documentation.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'total_evaporation',
@@ -555,7 +557,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           combined with the V component of 10m wind to give the speed and direction of the horizontal 10m
           wind.
         |||,
-        'gee:units': 'm/s',
+        'gee:units': units.velocity_si,
       },
       {
         name: 'v_component_of_wind_10m',
@@ -568,7 +570,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           can be combined with the U component of 10m wind to give the speed and direction of the
           horizontal 10m wind.
         |||,
-        'gee:units': 'm/s',
+        'gee:units': units.velocity_si,
       },
       {
         name: 'surface_pressure',
@@ -582,7 +584,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           variable are Pascals (Pa). Surface pressure is often measured in hPa and sometimes is presented
           in the old units of millibars, mb (1 hPa = 1 mb = 100 Pa).
         |||,
-        'gee:units': 'Pa',
+        'gee:units': units.pascal,
       },
       {
         name: 'total_precipitation',
@@ -599,7 +601,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           variables with observations, because observations are often local to a particular point in
           space and time, rather than representing averages over a model grid box and model time step.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'leaf_area_index_high_vegetation',
@@ -607,12 +609,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           One-half of the total green leaf area per unit horizontal ground surface area for high
           vegetation type.
         |||,
-        'gee:units': 'm^2/m^2',
+        'gee:units': units.area_fraction,
       },
       {
         name: 'leaf_area_index_low_vegetation',
         description: 'One-half of the total green leaf area per unit horizontal ground surface area for low\nvegetation type.',
-        'gee:units': 'm^2/m^2',
+        'gee:units': units.area_fraction,
       },
       {
         name: 'snowfall_hourly',
@@ -627,22 +629,22 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'surface_latent_heat_flux_hourly',
         description: "Same as 'surface_latent_heat_flux' except not accumulated and only for the given forecast step.",
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_net_solar_radiation_hourly',
         description: "Same as 'surface_net_solar_radiation' except not accumulated and only for the given forecast step.",
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_net_thermal_radiation_hourly',
         description: "Same as 'surface_net_thermal_radiation' except not accumulated and only for the given forecast step.",
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_sensible_heat_flux_hourly',
         description: "Same as 'surface_sensible_heat_flux' except not accumulated and only for the given forecast step.",
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_solar_radiation_downwards_hourly',
@@ -650,7 +652,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           Same as 'surface_solar_radiation_downwards' except not accumulated and
           only for the given forecast step.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'surface_thermal_radiation_downwards_hourly',
@@ -658,7 +660,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           Same as 'surface_thermal_radiation_downwards' except not accumulated and
           only for the given forecast step.
         |||,
-        'gee:units': 'J/m2',
+        'gee:units': units.joules_per_meter2,
       },
       {
         name: 'evaporation_from_bare_soil_hourly',
@@ -692,12 +694,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'potential_evaporation_hourly',
         description: "Same as 'potential_evaporation' except not accumulated and only for the given forecast step.",
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'runoff_hourly',
         description: "Same as 'runoff' except not accumulated and only for the given forecast step.",
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'snow_evaporation_hourly',
@@ -707,12 +709,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'sub_surface_runoff_hourly',
         description: "Same as 'sub_surface_runoff' except not accumulated and only for the given forecast step.",
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'surface_runoff_hourly',
         description: "Same as 'surface_runoff' except not accumulated and only for the given forecast step.",
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'total_evaporation_hourly',
@@ -722,7 +724,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'total_precipitation_hourly',
         description: "Same as 'total_precipitation' except not accumulated and only for the given forecast step.",
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
     ],
     'gee:visualizations': [
@@ -742,24 +744,24 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               320.0,
             ],
             palette: [
-              '#000080',
-              '#0000D9',
-              '#4000FF',
-              '#8000FF',
-              '#0080FF',
-              '#00FFFF',
-              '#00FF80',
-              '#80FF00',
-              '#DAFF00',
-              '#FFFF00',
-              '#FFF500',
-              '#FFDA00',
-              '#FFB000',
-              '#FFA400',
-              '#FF4F00',
-              '#FF2500',
-              '#FF0A00',
-              '#FF00FF',
+              '000080',
+              '0000d9',
+              '4000ff',
+              '8000ff',
+              '0080ff',
+              '00ffff',
+              '00ff80',
+              '80ff00',
+              'daff00',
+              'ffff00',
+              'fff500',
+              'ffda00',
+              'ffb000',
+              'ffa400',
+              'ff4f00',
+              'ff2500',
+              'ff0a00',
+              'ff00ff',
             ],
             bands: [
               'temperature_2m',
@@ -783,12 +785,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               0.1,
             ],
             palette: [
-              '#FFFFFF',
-              '#00FFFF',
-              '#0080FF',
-              '#DA00FF',
-              '#FFA400',
-              '#FF0000',
+              'ffffff',
+              '00ffff',
+              '0080ff',
+              'da00ff',
+              'ffa400',
+              'ff0000',
             ],
             bands: [
               'total_precipitation',
@@ -812,13 +814,13 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               1150.0,
             ],
             palette: [
-              '#01FFFF',
-              '#058BFF',
-              '#0600FF',
-              '#DF00FF',
-              '#FF00FF',
-              '#FF8C00',
-              '#FF8C00',
+              '01ffff',
+              '058bff',
+              '0600ff',
+              'df00ff',
+              'ff00ff',
+              'ff8c00',
+              'ff8c00',
             ],
             bands: [
               'surface_pressure',
@@ -842,16 +844,16 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               30.0,
             ],
             palette: [
-              '#FFFFFF',
-              '#FFFF71',
-              '#DEFF00',
-              '#9EFF00',
-              '#77B038',
-              '#007E55',
-              '#005F51',
-              '#004B51',
-              '#013A7B',
-              '#023AAD',
+              'ffffff',
+              'ffff71',
+              'deff00',
+              '9eff00',
+              '77b038',
+              '007e55',
+              '005f51',
+              '004b51',
+              '013a7b',
+              '023aad',
             ],
             bands: [
               'u_component_of_wind_10m',
@@ -875,11 +877,11 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     Please acknowledge the use of ERA5-Land as stated in the
     [Copernicus C3S/CAMS License agreement](https://apps.ecmwf.int/datasets/licences/copernicus/):
 
-    - 5.1.2 Where the Licensee communicates or distributes Copernicus Products to the public, the
+    - 5.1.1 Where the Licensee communicates or distributes Copernicus Products to the public, the
     Licensee shall inform the recipients of the source by using the following or any similar notice:
     'Generated using Copernicus Climate Change Service Information [Year]'.
 
-    - 5.1.3 Where the Licensee makes or contributes to a publication or distribution containing
+    - 5.1.2 Where the Licensee makes or contributes to a publication or distribution containing
     adapted or modified Copernicus Products, the Licensee shall provide the following or any similar
     notice: 'Contains modified Copernicus Climate Change Service Information [Year]';
 

@@ -75,7 +75,6 @@ from checker import stac
 SUMMARIES = 'summaries'
 
 GEE_FEATURE_VIEW_INGESTION_PARAMS = 'gee:feature_view_ingestion_params'
-GEE_SKIP_FEATUREVIEW_GENERATION = 'gee:skip_featureview_generation'
 MAX_FEATURES_PER_TILE = 'max_features_per_tile'
 THINNING_STRATEGY = 'thinning_strategy'
 THINNING_RANKING = 'thinning_ranking'
@@ -86,15 +85,6 @@ MAX_FEATURES_RANGE = [150, 16000]
 
 THINNING_STRATEGIES = frozenset({'GLOBALLY_CONSISTENT', 'HIGHER_DENSITY'})
 DIRECTIONS = frozenset({'ASC', 'DESC'})
-
-TABLES_WITHOUT_FEATUREVIEW = frozenset({
-    'WWF/HydroATLAS/v1/Basins/level12',
-})
-
-
-# Use a function to allow a mock during testing.
-def table_without_featureview_exception(dataset_id: str) -> bool:
-  return dataset_id in TABLES_WITHOUT_FEATUREVIEW
 
 
 class Check(stac.NodeCheck):
@@ -107,10 +97,11 @@ class Check(stac.NodeCheck):
         stac.GeeType.IMAGE,
         stac.GeeType.IMAGE_COLLECTION,
         stac.GeeType.TABLE_COLLECTION):
-      if GEE_SKIP_FEATUREVIEW_GENERATION in node.stac:
+      if stac.SKIP_FEATUREVIEW_GENERATION in node.stac:
         yield cls.new_issue(
             node,
-            f'{GEE_SKIP_FEATUREVIEW_GENERATION} not allowed in {node.gee_type}')
+            f'{stac.SKIP_FEATUREVIEW_GENERATION} not allowed in '
+            f'{node.gee_type}')
 
     if SUMMARIES not in node.stac: return
     summaries = node.stac[SUMMARIES]
@@ -128,32 +119,23 @@ class Check(stac.NodeCheck):
             f'in {node.gee_type}')
       return
 
-    if GEE_FEATURE_VIEW_INGESTION_PARAMS not in summaries:
-      if GEE_SKIP_FEATUREVIEW_GENERATION in node.stac:
-        yield cls.new_issue(
-            node,
-            f'{GEE_SKIP_FEATUREVIEW_GENERATION} cannot be present if there is '
-            f'no {GEE_FEATURE_VIEW_INGESTION_PARAMS}')
-      if not table_without_featureview_exception(node.id):
-        yield cls.new_issue(
-            node,
-            f'{GEE_FEATURE_VIEW_INGESTION_PARAMS} must be present '
-            f'in {node.gee_type}')
-      return
-
-    if GEE_SKIP_FEATUREVIEW_GENERATION in node.stac:
-      skip = node.stac[GEE_SKIP_FEATUREVIEW_GENERATION]
+    if stac.SKIP_FEATUREVIEW_GENERATION in node.stac:
+      skip = node.stac[stac.SKIP_FEATUREVIEW_GENERATION]
       if not isinstance(skip, bool):
         yield cls.new_issue(
-            node, f'{GEE_SKIP_FEATUREVIEW_GENERATION} must be a bool')
+            node, f'{stac.SKIP_FEATUREVIEW_GENERATION} must be a bool')
       elif not skip:
         yield cls.new_issue(
-            node, f'{GEE_SKIP_FEATUREVIEW_GENERATION} cannot be false')
-    if table_without_featureview_exception(node.id):
+            node, f'{stac.SKIP_FEATUREVIEW_GENERATION} cannot be false')
+      return
+
+    if GEE_FEATURE_VIEW_INGESTION_PARAMS not in summaries:
       yield cls.new_issue(
           node,
-          f'{node.id} is in the list of tables without feature views, but '
-          f'{GEE_FEATURE_VIEW_INGESTION_PARAMS} is present')
+          f'{GEE_FEATURE_VIEW_INGESTION_PARAMS} must be present '
+          f'in {node.gee_type}',
+      )
+      return
 
     params = summaries[GEE_FEATURE_VIEW_INGESTION_PARAMS]
     if not isinstance(params, dict):

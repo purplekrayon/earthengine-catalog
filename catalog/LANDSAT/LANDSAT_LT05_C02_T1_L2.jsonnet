@@ -1,27 +1,27 @@
 local id = 'LANDSAT/LT05/C02/T1_L2';
 local subdir = 'LANDSAT';
-
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
 local units = import 'units.libsonnet';
+local notes = import 'templates/LANDSAT_L2.libsonnet';
 
-local license = spdx.proprietary;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
-
+local license = spdx.proprietary {
+  reference: 'https://www.usgs.gov/centers/eros/data-citation',
+};
+local versions = import 'versions.libsonnet';
+local version_table = import 'LT5_T1_L2_versions.libsonnet';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 {
   stac_version: ee_const.stac_version,
   type: ee_const.stac_type.collection,
   stac_extensions: [
     ee_const.ext_eo,
+    ee_const.ext_ver,
   ],
   id: id,
+  version: version,
   title: 'USGS Landsat 5 Level 2, Collection 2, Tier 1',
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
@@ -50,22 +50,10 @@ local self_url = catalog_subdir_url + base_filename;
 
     [Additional documentation and usage examples.](/earth-engine/guides/landsat)
 
-    Data provider notes:
-
-    * Data products must contain both optical and thermal data to be
-      successfully processed to surface temperature, as ASTER NDVI is
-      required to temporally adjust the ASTER GED product to the target Landsat
-      scene. Therefore, night time acquisitions cannot be processed to
-      surface temperature.
-
-    * A known error exists in the surface temperature retrievals relative
-      to clouds and possibly cloud shadows. The characterization of these
-      issues has been documented by
-      [Cook et al., (2014)](https://doi.org/10.3390/rs61111244).
-  |||,
+  ||| + notes.description,
   license: license.id,
-  links: ee.standardLinks(subdir, id) + [
-    ee.link.license('https://www.usgs.gov/centers/eros/data-citation'),
+  links: ee.standardLinks(subdir, id) + version_config.version_links + [
+    ee.link.license(license.reference),
   ],
   keywords: [
     'cfmask',
@@ -83,7 +71,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   providers: [
     ee.producer_provider('USGS', 'https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-2-level-2-science-products'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent_global('1984-03-16T16:18:01Z', '2012-05-05T17:54:06Z'),
   summaries: {
@@ -435,7 +423,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'ST_CDIST',
         description: "Pixel distance to cloud.\nIf 'PROCESSING_LEVEL' is set to 'L2SR', this band is fully masked out.",
-        'gee:units': 'km',
+        'gee:units': units.kilometer,
         'gee:scale': 0.01,
       },
       {

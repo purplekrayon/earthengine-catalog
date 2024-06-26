@@ -123,11 +123,11 @@ class Check(stac.NodeCheck):
         if not isinstance(color, str):
           yield cls.new_issue(node, f'{COLOR} must be a str')
         else:
-          if not re.fullmatch(r'[0-9a-fA-F]{6}([0-9a-fA-F]{2})?', color):
+          if not re.fullmatch(r'[0-9a-f]{6}', color):
             if color not in COLOR_NAMES:
               yield cls.new_issue(
                   node,
-                  f'{COLOR} must be a 6 (or 8) character hex or color name - ' +
+                  f'{COLOR} must be a 6 character hex or color name - ' +
                   f'found "{color}"')
 
       if FILL_COLOR in table_visualization:
@@ -135,6 +135,7 @@ class Check(stac.NodeCheck):
         if not isinstance(fill_color, str):
           yield cls.new_issue(node, f'{FILL_COLOR} must be a str')
         else:
+          # TODO(schwehr): Does transparency work?
           if not re.fullmatch(r'[0-9a-fA-F]{6}([0-9a-fA-F]{2})?', fill_color):
             if fill_color not in COLOR_NAMES:
               yield cls.new_issue(
@@ -147,7 +148,7 @@ class Check(stac.NodeCheck):
         if not isinstance(point_size, int):
           yield cls.new_issue(node, f'{POINT_SIZE} must be an int')
         else:
-          if point_size < MIN_POINT_SIZE or point_size > MAX_POINT_SIZE:
+          if not MIN_POINT_SIZE <= point_size <= MAX_POINT_SIZE:
             yield cls.new_issue(
                 node, f'{POINT_SIZE} must be in the range of ' +
                 f'[{MIN_POINT_SIZE}:{MAX_POINT_SIZE}]')
@@ -169,7 +170,7 @@ class Check(stac.NodeCheck):
         if not isinstance(width, (int, float)):
           yield cls.new_issue(node, f'{WIDTH} must be an number')
         else:
-          if width < MIN_WIDTH or width > MAX_WIDTH:
+          if not MIN_WIDTH <= width <= MAX_WIDTH:
             yield cls.new_issue(
                 node, f'{WIDTH} must be in the range of ' +
                 f'[{MIN_WIDTH}:{MAX_WIDTH}]')

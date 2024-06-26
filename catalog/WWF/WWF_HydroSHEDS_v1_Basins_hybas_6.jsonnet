@@ -49,7 +49,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.example(id, basename + '_FeatureView'),
+    ee.link.example(id, subdir, basename + '_FeatureView'),
   ],
   keywords: [
     'geophysical',
@@ -186,7 +186,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           zoom: 12,
         },
         table_visualization: {
-          color: 'B2B2B3',
+          color: 'b2b2b3',
           width: 1.0,
         },
       },

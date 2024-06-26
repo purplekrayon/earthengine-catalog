@@ -1,29 +1,35 @@
 local id = 'NASA_USDA/HSL/SMAP10KM_soil_moisture';
+local successor_id = 'NASA/SMAP/SPL4SMGP/007';
 local subdir = 'NASA_USDA';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.proprietary;
 
 local basename = std.strReplace(id, '/', '_');
+local successor_basename = std.strReplace(successor_id, '/', '_');
+local successor_filename = successor_basename + '.json';
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
+local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
+local successor_url = ee_const.catalog_base + 'NASA/' + successor_filename;
 
 {
   stac_version: ee_const.stac_version,
   type: ee_const.stac_type.collection,
   stac_extensions: [
     ee_const.ext_eo,
-    ee_const.ext_sci
+    ee_const.ext_sci,
+    ee_const.ext_ver,
   ],
   id: id,
-  title: 'NASA-USDA Enhanced SMAP Global Soil Moisture Data',
+  title: 'NASA-USDA Enhanced SMAP Global Soil Moisture Data [deprecated]',
   'gee:type': ee_const.gee_type.image_collection,
+  deprecated: true,
   description: |||
-    This dataset is being superseded by [SPL4SMGP.007](NASA_SMAP_SPL4SMGP_007)
-
     The NASA-USDA Enhanced SMAP Global soil moisture data provides soil moisture information across
     the globe at 10-km spatial resolution. This dataset includes:
     [surface](https://gimms.gsfc.nasa.gov/SMOS/SMAP/Surface_Soil_Moisture_SMAP.pdf)
@@ -64,7 +70,9 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id),
+  links: ee.standardLinks(subdir, id) + [
+    ee.link.successor(successor_id, successor_url)
+  ],
   keywords: [
     'geophysical',
     'hsl',
@@ -87,27 +95,27 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'ssm',
         description: 'Surface soil moisture',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'susm',
         description: 'Subsurface soil moisture',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'smp',
         description: 'Soil moisture profile',
-        'gee:units': 'fraction',
+        'gee:units': units.unspecified_fraction,
       },
       {
         name: 'ssma',
         description: 'Surface soil moisture anomaly',
-        'gee:units': '-',
+        'gee:units': units.dimensionless,
       },
       {
         name: 'susma',
         description: 'Subsurface soil moisture anomaly',
-        'gee:units': '-',
+        'gee:units': units.dimensionless,
       },
     ],
     'gee:visualizations': [
@@ -241,7 +249,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         Improved prediction of quasi-global vegetation conditions using remotely sensed surface soil
         moisture, *Geophysical Research Letters*,
         39: (L19406).
-        [doi:10.1029/2012GL053470][https://doi.org/10.1029/2012GL053470]
+        [doi:10.1029/2012GL053470][https://doi.org/10.1029/2012GL053470)
         [Google Scholar](https://scholar.google.com/scholar?as_sdt=0%2C21&q=Improved+prediction+of+quasi-global+vegetation+conditions+using+remotely-sensed+surface+soil+moisture%2C+&btnG=)
       |||,
       doi: '10.1029/2012GL053470',
@@ -289,8 +297,9 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   'gee:terms_of_use': |||
     This dataset is in the public domain and is available
     without restriction on use and distribution. See [NASA's
-    Earth Science Data & Information Policy](https://science.nasa.gov/earth-science/earth-science-data/data-information-policy)
+    Earth Science Data & Information Policy](https://www.earthdata.nasa.gov/engage/open-data-services-and-software/data-and-information-policy)
     for additional information.
   |||,
   'gee:user_uploaded': true,
+   version: ee_const.version_unknown,
 }

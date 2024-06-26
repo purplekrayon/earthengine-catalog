@@ -1,6 +1,7 @@
 local id = 'ECMWF/ERA5/DAILY';
 local subdir = 'ECMWF';
 
+local cds_notice = import 'templates/cds_notice.libsonnet';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
@@ -22,7 +23,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   id: id,
   title: 'ERA5 Daily Aggregates - Latest Climate Reanalysis Produced by ECMWF / Copernicus Climate Change Service',
   'gee:type': ee_const.gee_type.image_collection,
-  description: |||
+  description: cds_notice.body + |||
+
     ERA5 is the fifth generation ECMWF atmospheric reanalysis of the global climate.
     Reanalysis combines model data with observations from across the world into
     a globally complete and consistent dataset. ERA5 replaces its predecessor,
@@ -108,27 +110,27 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'total_precipitation',
         description: 'Total precipitation (daily sums)',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'surface_pressure',
         description: 'Surface pressure (daily average)',
-        'gee:units': 'Pa',
+        'gee:units': units.pascal,
       },
       {
         name: 'mean_sea_level_pressure',
         description: 'Mean sea level pressure (daily average)',
-        'gee:units': 'Pa',
+        'gee:units': units.pascal,
       },
       {
         name: 'u_component_of_wind_10m',
         description: '10m u-component of wind (daily average)',
-        'gee:units': 'm s-1',
+        'gee:units': units.velocity_si,
       },
       {
         name: 'v_component_of_wind_10m',
         description: '10m v-component of wind (daily average)',
-        'gee:units': 'm s-1',
+        'gee:units': units.velocity_si,
       },
     ],
     'gee:visualizations': [
@@ -148,24 +150,24 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               320.0,
             ],
             palette: [
-              '#000080',
-              '#0000D9',
-              '#4000FF',
-              '#8000FF',
-              '#0080FF',
-              '#00FFFF',
-              '#00FF80',
-              '#80FF00',
-              '#DAFF00',
-              '#FFFF00',
-              '#FFF500',
-              '#FFDA00',
-              '#FFB000',
-              '#FFA400',
-              '#FF4F00',
-              '#FF2500',
-              '#FF0A00',
-              '#FF00FF',
+              '000080',
+              '0000d9',
+              '4000ff',
+              '8000ff',
+              '0080ff',
+              '00ffff',
+              '00ff80',
+              '80ff00',
+              'daff00',
+              'ffff00',
+              'fff500',
+              'ffda00',
+              'ffb000',
+              'ffa400',
+              'ff4f00',
+              'ff2500',
+              'ff0a00',
+              'ff00ff',
             ],
             bands: [
               'mean_2m_air_temperature',
@@ -189,12 +191,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               0.1,
             ],
             palette: [
-              '#FFFFFF',
-              '#00FFFF',
-              '#0080FF',
-              '#DA00FF',
-              '#FFA400',
-              '#FF0000',
+              'ffffff',
+              '00ffff',
+              '0080ff',
+              'da00ff',
+              'ffa400',
+              'ff0000',
             ],
             bands: [
               'total_precipitation',
@@ -218,13 +220,13 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               1150.0,
             ],
             palette: [
-              '#01FFFF',
-              '#058BFF',
-              '#0600FF',
-              '#DF00FF',
-              '#FF00FF',
-              '#FF8C00',
-              '#FF8C00',
+              '01ffff',
+              '058bff',
+              '0600ff',
+              'df00ff',
+              'ff00ff',
+              'ff8c00',
+              'ff8c00',
             ],
             bands: [
               'surface_pressure',
@@ -248,16 +250,16 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               30.0,
             ],
             palette: [
-              '#FFFFFF',
-              '#FFFF71',
-              '#DEFF00',
-              '#9EFF00',
-              '#77B038',
-              '#007E55',
-              '#005F51',
-              '#004B51',
-              '#013A7B',
-              '#023AAD',
+              'ffffff',
+              'ffff71',
+              'deff00',
+              '9eff00',
+              '77b038',
+              '007e55',
+              '005f51',
+              '004b51',
+              '013a7b',
+              '023aad',
             ],
             bands: [
               'u_component_of_wind_10m',
@@ -324,10 +326,10 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   'gee:terms_of_use': |||
     Please acknowledge the use of ERA5 as stated in the [Copernicus C3S/CAMS License agreement](https://apps.ecmwf.int/datasets/licences/copernicus/):
 
-    - 5.1.2 Where the Licensee communicates or distributes Copernicus Products to the public,
+    - 5.1.1 Where the Licensee communicates or distributes Copernicus Products to the public,
     the Licensee shall inform the recipients of the source by using the following or any similar notice: "Generated using
     Copernicus Climate Change Service information (Year)".
-    - 5.1.3 Where the Licensee makes or contributes to a publication or distribution containing adapted or
+    - 5.1.2 Where the Licensee makes or contributes to a publication or distribution containing adapted or
     modified Copernicus Products, the Licensee shall provide the following or any similar notice: "Contains modified Copernicus
     Climate Change Service information (Year)".
     - 5.1.3 Any such publication or distribution covered by clauses 5.1.1 and 5.1.2 shall state that neither the European Commission

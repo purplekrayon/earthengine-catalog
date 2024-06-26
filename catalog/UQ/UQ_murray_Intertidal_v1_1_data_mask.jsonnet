@@ -10,9 +10,6 @@ local license = spdx.cc_by_4_0;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -59,15 +56,14 @@ local self_url = catalog_subdir_url + base_filename;
     'uq',
   ],
   providers: [
-    ee.producer_provider('Murray/UQ/Google/USGS/NASA', 'https://intertidal.app'),
+    ee.producer_provider(
+      'Murray/UQ/Google/USGS/NASA', 'https://intertidal.app'),
     ee.host_provider(self_ee_catalog_url),
   ],
   extent: ee.extent(-180.0, -60.0, 180.0, 60.0,
                     '1984-01-01T00:00:00Z', '2017-01-01T00:00:00Z'),
   summaries: {
-    gsd: [
-      30.0,
-    ],
+    gsd: [30],
     'eo:bands': [
       {
         name: 'datamask',
@@ -79,14 +75,8 @@ local self_url = catalog_subdir_url + base_filename;
               description: 'Data mask',
               bit_count: 1,
               values: [
-                {
-                  description: 'No data',
-                  value: 0,
-                },
-                {
-                  value: 1,
-                  description: 'Classified area',
-                },
+                {value: 0,  description: 'No data'},
+                {value: 1, description: 'Classified area'},
               ],
               first_bit: 0,
             },
@@ -98,26 +88,13 @@ local self_url = catalog_subdir_url + base_filename;
     'gee:visualizations': [
       {
         display_name: 'Data mask',
-        lookat: {
-          lat: 37.4394,
-          lon: 126.6339,
-          zoom: 10,
-        },
+        lookat: {lon: 126.6339, lat: 37.4394, zoom: 10},
         image_visualization: {
           band_vis: {
-            min: [
-              0.0,
-            ],
-            max: [
-              1.0,
-            ],
-            palette: [
-              '000000',
-              'FFFFFF',
-            ],
-            bands: [
-              'datamask',
-            ],
+            min: [0],
+            max: [1],
+            palette: ['000000', 'ffffff'],
+            bands: ['datamask'],
           },
         },
       },
@@ -128,8 +105,20 @@ local self_url = catalog_subdir_url + base_filename;
     Murray, N.J., Phinn, S.R., DeWitt, M., Ferrari, R., Johnston, R., Lyons, M.B.,
     Clinton, N., Thau, D. & Fuller, R.A. (2019) The global distribution and
     trajectory of tidal flats. Nature, 565, 222-225.
+    [doi:10.1038/s41586-018-0805-8](https://doi.org/10.1038/s41586-018-0805-8),
   |||,
-  'gee:terms_of_use': |||
+  'sci:publications': [
+    {
+      citation: |||
+        Murray, N. J., Phinn, S. P., Fuller, R. A., DeWitt, M., Ferrari, R.,
+        Johnston, R., Clinton, N., & Lyons, M. B. (2022). High-resolution global
+        maps of tidal flat ecosystems from 1984 to 2019. Scientific Data,
+        9(1).
+        [doi:10.1038/s41597-022-01635-5](https://doi.org/10.1038/s41597-022-01635-5),
+      |||
+    }
+  ],
+  'gee:terms_of_use': ee.gee_terms_of_use(license) + '\n\n' + |||
     This work is licensed under a Creative Commons Attribution 4.0
     International License.
 

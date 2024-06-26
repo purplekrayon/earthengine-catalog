@@ -11,7 +11,6 @@ local template = import 'templates/MODIS_006_MODOCGA.libsonnet';
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
 
 {
   stac_version: ee_const.stac_version,
@@ -23,7 +22,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
   ],
   id: id,
   title: 'MODOCGA.006 Terra Ocean Reflectance Daily Global 1km',
-  version: 'V006',
+  version: '6',
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
     The MODOCGA V6 ocean reflectance product consists of

@@ -1,15 +1,17 @@
 local id = 'Oxford/MAP/accessibility_to_healthcare_2019';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/accessibility_to_cities_versions.libsonnet';
+
 local subdir = 'Oxford';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 
 local license = spdx.cc_by_4_0;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
 
 {
   stac_version: ee_const.stac_version,
@@ -17,9 +19,11 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   stac_extensions: [
     ee_const.ext_eo,
     ee_const.ext_sci,
+    ee_const.ext_ver,
   ],
   id: id,
   title: 'Accessibility to Healthcare 2019',
+  version: version,
   'gee:type': ee_const.gee_type.image,
   description: |||
     This global accessibility map enumerates land-based travel time (in
@@ -68,7 +72,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     Source dataset credits are as described in the accompanying paper.
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id),
+  links: ee.standardLinks(subdir, id) + version_config.version_links,
   keywords: [
     'accessibility',
     'jrc',
@@ -78,7 +82,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   ],
   providers: [
     ee.producer_provider('Malaria Atlas Project', 'https://malariaatlas.org/research-project/accessibility-to-cities/'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent(-180.0, -60.0, 180.0, 85.0,
                     '2019-01-01T00:00:00Z', '2020-01-01T00:00:00Z'),
@@ -88,12 +92,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'accessibility',
         description: 'Travel time to the nearest hospital or clinic.',
-        'gee:units': 'minutes',
+        'gee:units': units.minute,
       },
       {
         name: 'accessibility_walking_only',
         description: 'Travel time to the nearest hospital or clinic using non-motorized transport.',
-        'gee:units': 'minutes',
+        'gee:units': units.minute,
       },
     ],
     'gee:visualizations': [
@@ -134,7 +138,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     },
   },
   'sci:citation': |||
-    D.J. Weiss, A. Nelson, C.A. Vargas-Ruiz, K. Gligorić, S. Bavadekar,
+    D.J. Weiss, A. Nelson, C.A. Vargas-Ruiz, K. Gligori&cacute;, S. Bavadekar,
     E. Gabrilovich, A. Bertozzi-Villa, J. Rozier, H.S. Gibson, T. Shekel,
     C. Kamath, A. Lieber, K. Schulman, Y. Shao, V. Qarkaxhija, A.K. Nandi,
     S.H. Keddie, S. Rumisha, E. Cameron, K.E. Battle, S. Bhatt, P.W. Gething.

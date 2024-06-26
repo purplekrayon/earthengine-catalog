@@ -764,7 +764,7 @@ local units = import 'units.libsonnet';
             description: |||
               Omitted snow/ice: land according to the water mask that
               was classified as something other than snow but with a maximum annual
-              temperature below 1◦C, relabeled as snow/ice.
+              temperature below 1&deg;C, relabeled as snow/ice.
             |||,
           },
           {
@@ -772,7 +772,7 @@ local units = import 'units.libsonnet';
             description: |||
               Misclassified snow/ice: land according to the water mask
               that was classified as snow but with a minimum annual temperature
-              greater than 1◦C, relabeled as barren.
+              greater than 1&deg;C, relabeled as barren.
             |||,
           },
           {
@@ -805,11 +805,7 @@ local units = import 'units.libsonnet';
     'gee:visualizations': [
       {
         display_name: 'IGBP Land Cover',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: 6.746, lat: 46.529, zoom: 6},
         image_visualization: {
           band_vis: {
             min: [

@@ -1,20 +1,17 @@
 local id = 'USGS/NED';
-local successor_id = 'USGS/3DEP/10m';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/NED_versions.libsonnet';
+
 local subdir = 'USGS';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
 local units = import 'units.libsonnet';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 
 local license = spdx.proprietary;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -47,10 +44,7 @@ local self_url = catalog_subdir_url + base_filename;
     Map after the 3D Elevation Program became operational.
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id) + [
-    ee.link.successor(
-        successor_id, ee_const.catalog_base + 'USGS/3DEP/USGS_3DEP_10m.json'),
-  ],
+  links: ee.standardLinks(subdir, id) + version_config.version_links,
   keywords: [
     'dem',
     'elevation',
@@ -61,7 +55,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   providers: [
     ee.producer_provider('United States Geological Survey', 'https://nationalmap.gov/elevation.html'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent(-171.0, -15.0, 164.0, 70.0,
                     '2012-02-07T00:00:00Z', '2012-02-07T00:00:00Z'),
@@ -70,7 +64,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'elevation',
         description: 'Elevation',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
         gsd: 10.2,
       },
     ],

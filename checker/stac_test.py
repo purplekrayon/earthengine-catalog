@@ -13,43 +13,6 @@ ID = 'id'
 EMPTY_PATH = pathlib.Path('')
 
 
-class NodeTest(absltest.TestCase):
-
-  def test_two_level_catalog(self):
-    node = stac.Node(ID, EMPTY_PATH, CATALOG, IMAGE, {})
-
-    for dataset_id in ('', 'a', 'a/b', 'a/b/c'):
-      node.id = dataset_id
-      self.assertFalse(node.is_two_level())
-
-    for dataset_id in ('NASA', 'NOAA', 'USGS'):
-      node.id = dataset_id
-      self.assertFalse(
-          node.is_two_level(), f'id should not be two level: {dataset_id}')
-
-    for dataset_id in ('NASA/b', 'NOAA/b', 'USGS/b'):
-      node.id = dataset_id
-      self.assertTrue(
-          node.is_two_level(), f'id should be two level: {dataset_id}')
-
-  def test_two_level_collection(self):
-    node = stac.Node(ID, EMPTY_PATH, COLLECTION, IMAGE, {})
-
-    for dataset_id in ('a', 'a/b', 'a/b/c'):
-      node.id = dataset_id
-      self.assertFalse(node.is_two_level())
-
-    for dataset_id in ('NASA', 'NOAA', 'USGS', 'NASA/b', 'NOAA/b', 'USGS/b'):
-      node.id = dataset_id
-      self.assertFalse(
-          node.is_two_level(), f'id should not be two level: {dataset_id}')
-
-    for dataset_id in ('NASA/b/c', 'NOAA/b/d', 'USGS/b/d', 'NASA/b/c/d'):
-      node.id = dataset_id
-      self.assertTrue(
-          node.is_two_level(), f'id should be two level: {dataset_id}')
-
-
 class IssueTest(absltest.TestCase):
 
   def test_str(self):
@@ -71,7 +34,8 @@ class CheckTest(absltest.TestCase):
 
   def test_new_issue(self):
     dataset_id = 'an id'
-    path = pathlib.Path('a/path')
+    path = pathlib.Path('a/path.json')
+    expected_path = pathlib.Path('a/path.jsonnet')
     stac_type = stac.StacType.COLLECTION
     gee_type = stac.GeeType.TABLE
     stac_data = {'field': 'value'}
@@ -81,14 +45,17 @@ class CheckTest(absltest.TestCase):
     issue = stac.Check.new_issue(node, message)
 
     self.assertEqual(dataset_id, issue.id)
-    self.assertEqual(path, issue.path)
-    self.assertEqual('unknown', issue.check_name)
+    self.assertEqual(expected_path, issue.path)
+    self.assertEqual(
+        'https://github.com/google/earthengine-catalog/blob/main/checker/stac.py',
+        issue.check_name,
+    )
     self.assertEqual(message, issue.message)
     self.assertEqual(stac.IssueLevel.ERROR, issue.level)
 
   def test_new_issue_with_warning(self):
     dataset_id = 'id2'
-    path = pathlib.Path('another/path')
+    path = pathlib.Path('another/path.json')
     stac_type = stac.StacType.COLLECTION
     gee_type = stac.GeeType.TABLE
     stac_data = {'field2': 'value2'}
@@ -98,7 +65,12 @@ class CheckTest(absltest.TestCase):
     issue = stac.Check.new_issue(node, message, stac.IssueLevel.WARNING)
 
     expect = stac.Issue(
-        dataset_id, path, 'unknown', message, stac.IssueLevel.WARNING)
+        dataset_id,
+        pathlib.Path('another/path.jsonnet'),
+        'https://github.com/google/earthengine-catalog/blob/main/checker/stac.py',
+        message,
+        stac.IssueLevel.WARNING,
+    )
 
     self.assertEqual(expect, issue)
 

@@ -13,8 +13,6 @@ local base_filename = basename + '.json';
 local successor_basename = std.strReplace(successor_id, '/', '_');
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
 local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -84,22 +82,22 @@ local self_url = catalog_subdir_url + base_filename;
               1.0,
             ],
             palette: [
-              'FFFFFF',
-              'CE7E45',
-              'DF923D',
-              'F1B555',
-              'FCD163',
-              '99B718',
-              '74A901',
-              '66A000',
+              'ffffff',
+              'ce7e45',
+              'df923d',
+              'f1b555',
+              'fcd163',
+              '99b718',
+              '74a901',
+              '66a000',
               '529400',
-              '3E8601',
+              '3e8601',
               '207401',
               '056201',
-              '004C00',
-              '023B01',
-              '012E01',
-              '011D01',
+              '004c00',
+              '023b01',
+              '012e01',
+              '011d01',
               '011301',
             ],
             bands: [

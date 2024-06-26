@@ -11,9 +11,6 @@ local license = spdx.proprietary;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -44,6 +41,11 @@ local self_url = catalog_subdir_url + base_filename;
     quality.
 
     Additional information can be found [here](https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms/about-firms).
+
+    NOTE: VIIRS FIRMS datasets from NOAA20 and SUOMI are also available:
+
+    * [NASA/LANCE/NOAA20_VIIRS/C2](NASA_LANCE_NOAA20_VIIRS_C2)
+    * [NASA/LANCE/SNPP_VIIRS/C2](NASA_LANCE_SNPP_VIIRS_C2)
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id),
@@ -150,15 +152,13 @@ local self_url = catalog_subdir_url + base_filename;
     NASA promotes the full and open sharing of all data with the research and
     applications communities, private industry, academia, and the general
     public. Read the [NASA Data and Information Policy]
-    (https://science.nasa.gov/earth-science/earth-science-data/data-information-policy/).
+    (https://www.earthdata.nasa.gov/learn/use-data/data-use-policy).
 
-    If you provide the [Land, Atmosphere Near real-time Capability for EOS
-    (LANCE) / Fire Information for Resource Management System (FIRMS)]
-    (https://earthdata.nasa.gov/earth-observation-data/near-real-time)
-    data to a third party, follow the guidelines in the [LANCE Citation,
-    Acknowledgements, and Disclaimer]
-    (https://earthdata.nasa.gov/earth-observation-data/near-real-time/citation#ed-lance-disclaimer)
-    site and replicate or provide a link to the [disclaimer]
-    (https://earthdata.nasa.gov/earth-observation-data/near-real-time/citation#ed-lance-disclaimer).
+    If you provide the
+    [Land, Atmosphere Near real-time Capability for EOS (LANCE) / Fire Information for Resource Management System (FIRMS)](https://earthdata.nasa.gov/earth-observation-data/near-real-time)
+    data to a third party, follow the guidelines in the
+    [LANCE Citation, Acknowledgements, and Disclaimer](https://earthdata.nasa.gov/earth-observation-data/near-real-time/citation#ed-lance-disclaimer)
+    site and replicate or provide a link to the
+    [disclaimer](https://earthdata.nasa.gov/earth-observation-data/near-real-time/citation#ed-lance-disclaimer).
   |||,
 }

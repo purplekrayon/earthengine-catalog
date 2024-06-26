@@ -11,9 +11,6 @@ local license = spdx.etalab_2_0;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -81,7 +78,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'MNT',
         description: 'Terrain elevation in meters.',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'SRC',
@@ -97,7 +94,7 @@ local self_url = catalog_subdir_url + base_filename;
           The distance in meters between the node and the nearest point used to
           calculate its altitude.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
     ],
     'gee:visualizations': [
@@ -141,5 +138,5 @@ local self_url = catalog_subdir_url + base_filename;
     IGN (2021). RGE ALTI 1m [Data set]. Accessed 2022-07-01 from
     [IGN website](https://geoservices.ign.fr/rgealti#telechargement1m)
   |||,
-  'gee:terms_of_use': '[' + license.id + '](' + license.reference + ')'
+  'gee:terms_of_use': ee.gee_terms_of_use(license),
 }

@@ -1,22 +1,17 @@
-local id = 'USFS/GTAC/LCMS/v2020-5';
-local successor_id = 'USFS/GTAC/LCMS/v2021-7';
-local latest_id = successor_id;
-local subdir = 'USFS';
-
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local versions = import 'versions.libsonnet';
+local version_table = import 'USFS_GTAC_LCMS_versions.libsonnet';
+
+local subdir = 'USFS';
+local id = 'USFS/GTAC/LCMS/v2020-5';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
+local basename = std.strReplace(id, '/', '_');
+local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
 
 local license = spdx.proprietary;
-
-local basename = std.strReplace(id, '/', '_');
-local successor_basename = std.strReplace(successor_id, '/', '_');
-local latest_basename = std.strReplace(latest_id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -27,14 +22,16 @@ local self_url = catalog_subdir_url + base_filename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'USFS Landscape Change Monitoring System v2020.5',
-  version: 'v2020.5',
-  // The next version, USFS/GTAC/LCMS/v2020-6, only covers Puerto Rico, so do
-  // not set "deprecated: true,".
+  title:
+    'USFS Landscape Change Monitoring System ' + version + ' ' +
+    '(Conterminous United States and Southeastern Alaska) [deprecated]',
+  version: version,
+  deprecated: true,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
     This product is part of the Landscape Change Monitoring System (LCMS) data suite.
-    It shows LCMS-modeled change, land cover, and/or land use classes for each year.
+    It shows LCMS-modeled change, land cover, and/or land use classes for each year. This 
+    LCMS version covers the conterminous United States (CONUS) and Southeastern Alaska (SEAK).
 
     LCMS is a remote sensing-based system for mapping and monitoring landscape change across the
     United States. Its objective is to develop a consistent approach using the latest technology
@@ -151,17 +148,8 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.license(
-        'https://data.fs.usda.gov/geodata/rastergateway/LCMS/index.php'),
-    {
-      rel: ee_const.rel.source,
-      href: 'https://data.fs.usda.gov/geodata/rastergateway/LCMS',
-    },
-    ee.link.latest(latest_id, catalog_subdir_url + latest_basename + '.json'),
-    ee.link.successor(
-        successor_id, catalog_subdir_url + successor_basename + '.json'),
-    // See also USFS_GTAC_LCMS_v2020-6
-  ],
+    ee.link.license('https://data.fs.usda.gov/geodata/rastergateway/LCMS/index.php')
+  ] + version_config.version_links,
   keywords: [
     'change',
     'change_detection',
@@ -233,7 +221,7 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 5,
-            color: '1B1716',
+            color: '1b1716',
             description: 'Non-Processing Area Mask',
           },
         ],
@@ -305,7 +293,7 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 11,
-            color: 'AA7700',
+            color: 'aa7700',
             description: 'Barren & Grass/Forb/Herb Mix',
           },
           {
@@ -325,7 +313,7 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 15,
-            color: '1B1716',
+            color: '1b1716',
             description: 'Non-Processing Area Mask',
           },
         ],
@@ -373,13 +361,13 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 7,
-            color: '1B1716',
+            color: '1b1716',
             description: 'Non-Processing Area Mask',
           },
         ],
       },
       {
-        name: 'Change_Raw_Probability_Slow-Loss',
+        name: 'Change_Raw_Probability_Slow_Loss',
         description: |||
           Raw LCMS modeled probability of Slow Loss. Defined as: Slow Loss includes the following
           classes from the TimeSync change process interpretation-
@@ -653,7 +641,7 @@ local self_url = catalog_subdir_url + base_filename;
               'f39268',
               'd54309',
               '00a398',
-              '1B1716',
+              '1b1716',
               'b30088',
             ],
             bands: [
@@ -688,11 +676,11 @@ local self_url = catalog_subdir_url + base_filename;
               'ffad33',
               'ffe0b3',
               'ffff00',
-              'AA7700',
+              'aa7700',
               'd3bf9b',
               'ffffff',
               '4780f3',
-              '1B1716',
+              '1b1716',
             ],
             bands: [
               'Land_Cover',
@@ -720,7 +708,7 @@ local self_url = catalog_subdir_url + base_filename;
               'f39268',
               'd54309',
               '00a398',
-              '1B1716',
+              '1b1716',
             ],
             bands: [
               'Land_Use',

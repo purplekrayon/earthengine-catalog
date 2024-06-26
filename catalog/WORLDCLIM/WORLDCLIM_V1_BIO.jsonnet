@@ -1,5 +1,6 @@
 local id = 'WORLDCLIM/V1/BIO';
 local subdir = 'WORLDCLIM';
+local version = '1';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
@@ -11,9 +12,6 @@ local license = spdx.cc_by_sa_4_0;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -24,8 +22,8 @@ local self_url = catalog_subdir_url + base_filename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'WorldClim BIO Variables V1',
-  version: 'V1',
+  title: 'WorldClim BIO Variables V' + version,
+  version: version,
   'gee:type': ee_const.gee_type.image,
   description: |||
     WorldClim V1 Bioclim provides bioclimatic variables that are derived from
@@ -69,94 +67,94 @@ local self_url = catalog_subdir_url + base_filename;
     'worldclim',
   ],
   providers: [
-    ee.producer_provider('University of California, Berkeley', 'https://www.worldclim.org/'),
+    ee.producer_provider(
+      'University of California, Berkeley', 'https://www.worldclim.org/'),
     ee.host_provider(self_ee_catalog_url),
   ],
   extent: ee.extent_global('1960-01-01T00:00:00Z', '1991-01-01T00:00:00Z'),
   summaries: {
-    gsd: [
-      927.67,
-    ],
+    gsd: [927.67],
     'eo:bands': [
       {
         name: 'bio01',
         description: 'Annual mean temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio02',
-        description: 'Mean diurnal range (mean of monthly (max temp - min temp))',
-        'gee:units': '°C',
+        description:
+          'Mean diurnal range (mean of monthly (max temp - min temp))',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio03',
-        description: 'Isothermality (bio02/bio07)',
+        description: 'Isothermality (bio02/bio07 * 100)',
         'gee:units': units.percent,
       },
       {
         name: 'bio04',
         description: 'Temperature seasonality (Standard deviation * 100)',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.01,
       },
       {
         name: 'bio05',
         description: 'Max temperature of warmest month',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio06',
         description: 'Min temperature of coldest month',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio07',
         description: 'Temperature annual range (bio05-bio06)',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio08',
         description: 'Mean temperature of wettest quarter',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio09',
         description: 'Mean temperature of driest quarter',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio10',
         description: 'Mean temperature of warmest quarter',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio11',
         description: 'Mean temperature of coldest quarter',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'bio12',
         description: 'Annual precipitation',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'bio13',
         description: 'Precipitation of wettest month',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'bio14',
         description: 'Precipitation of driest month',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'bio15',
@@ -166,150 +164,58 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'bio16',
         description: 'Precipitation of wettest quarter',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'bio17',
         description: 'Precipitation of driest quarter',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'bio18',
         description: 'Precipitation of warmest quarter',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'bio19',
         description: 'Precipitation of coldest quarter',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
     ],
     'gee:visualizations': [
       {
-        display_name: 'Annual Mean Temperature',
-        lookat: {
-          lat: 52.48,
-          lon: 71.72,
-          zoom: 1,
-        },
+        display_name: 'Annual Mean Temperature (C)',
+        lookat: {lat: 52.4, lon: 71.7, zoom: 3},
         image_visualization: {
           band_vis: {
-            min: [
-              -230.0,
-            ],
-            max: [
-              300.0,
-            ],
-            palette: [
-              'blue',
-              'purple',
-              'cyan',
-              'green',
-              'yellow',
-              'red',
-            ],
-            bands: [
-              'bio01',
-            ],
+            gain: [0.1],
+            min: [-23],
+            max: [30],
+            palette: ['blue', 'purple', 'cyan', 'green', 'yellow',  'red'],
+            bands: ['bio01'],
           },
         },
       },
     ],
-    bio01: {
-      minimum: -290.0,
-      maximum: 320.0,
-      'gee:estimated_range': true,
-    },
-    bio02: {
-      minimum: 9.0,
-      maximum: 214.0,
-      'gee:estimated_range': true,
-    },
-    bio03: {
-      minimum: 7.0,
-      maximum: 96.0,
-      'gee:estimated_range': true,
-    },
-    bio04: {
-      minimum: 62.0,
-      maximum: 22721.0,
-      'gee:estimated_range': true,
-    },
-    bio05: {
-      minimum: -96.0,
-      maximum: 490.0,
-      'gee:estimated_range': true,
-    },
-    bio06: {
-      minimum: -573.0,
-      maximum: 258.0,
-      'gee:estimated_range': true,
-    },
-    bio07: {
-      minimum: 53.0,
-      maximum: 725.0,
-      'gee:estimated_range': true,
-    },
-    bio08: {
-      minimum: -285.0,
-      maximum: 378.0,
-      'gee:estimated_range': true,
-    },
-    bio09: {
-      minimum: -521.0,
-      maximum: 366.0,
-      'gee:estimated_range': true,
-    },
-    bio10: {
-      minimum: -143.0,
-      maximum: 383.0,
-      'gee:estimated_range': true,
-    },
-    bio11: {
-      minimum: -521.0,
-      maximum: 289.0,
-      'gee:estimated_range': true,
-    },
-    bio12: {
-      minimum: 0.0,
-      maximum: 11401.0,
-      'gee:estimated_range': true,
-    },
-    bio13: {
-      minimum: 0.0,
-      maximum: 2949.0,
-      'gee:estimated_range': true,
-    },
-    bio14: {
-      minimum: 0.0,
-      maximum: 752.0,
-      'gee:estimated_range': true,
-    },
-    bio15: {
-      minimum: 0.0,
-      maximum: 265.0,
-      'gee:estimated_range': true,
-    },
-    bio16: {
-      minimum: 0.0,
-      maximum: 8019.0,
-      'gee:estimated_range': true,
-    },
-    bio17: {
-      minimum: 0.0,
-      maximum: 2495.0,
-      'gee:estimated_range': true,
-    },
-    bio18: {
-      minimum: 0.0,
-      maximum: 6090.0,
-      'gee:estimated_range': true,
-    },
-    bio19: {
-      minimum: 0.0,
-      maximum: 5162.0,
-      'gee:estimated_range': true,
-    },
+    bio01: {minimum: -29.0, maximum: 32.0, 'gee:estimated_range': true},
+    bio02: {minimum: 0.9, maximum: 21.4, 'gee:estimated_range': true},
+    bio03: {minimum: 7, maximum: 96, 'gee:estimated_range': true},
+    bio04: {minimum: 0.62, maximum: 227.21, 'gee:estimated_range': true},
+    bio05: {minimum: -9.6, maximum: 49.0, 'gee:estimated_range': true},
+    bio06: {minimum: -57.3, maximum: 25.8, 'gee:estimated_range': true},
+    bio07: {minimum: 5.3, maximum: 72.5, 'gee:estimated_range': true},
+    bio08: {minimum: -28.5, maximum: 37.8, 'gee:estimated_range': true},
+    bio09: {minimum: -52.1, maximum: 36.6, 'gee:estimated_range': true},
+    bio10: {minimum: -14.3, maximum: 38.3, 'gee:estimated_range': true},
+    bio11: {minimum: -52.1, maximum: 28.9, 'gee:estimated_range': true},
+    bio12: {minimum: 0, maximum: 11401, 'gee:estimated_range': true},
+    bio13: {minimum: 0, maximum: 2949, 'gee:estimated_range': true},
+    bio14: {minimum: 0, maximum: 752, 'gee:estimated_range': true},
+    bio15: {minimum: 0, maximum: 265, 'gee:estimated_range': true},
+    bio16: {minimum: 0, maximum: 8019, 'gee:estimated_range': true},
+    bio17: {minimum: 0, maximum: 2495, 'gee:estimated_range': true},
+    bio18: {minimum: 0, maximum: 6090, 'gee:estimated_range': true},
+    bio19: {minimum: 0, maximum: 5162, 'gee:estimated_range': true},
   },
   'sci:citation': |||
     Hijmans, R.J., S.E. Cameron, J.L. Parra, P.G. Jones and A. Jarvis,

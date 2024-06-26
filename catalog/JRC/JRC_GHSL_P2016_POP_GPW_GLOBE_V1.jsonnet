@@ -1,15 +1,15 @@
 local id = 'JRC/GHSL/P2016/POP_GPW_GLOBE_V1';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/jrc_pop_versions.libsonnet';
+
 local subdir = 'JRC';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
-
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 local license = spdx.proprietary;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
 
 {
   stac_version: ee_const.stac_version,
@@ -20,8 +20,9 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'GHSL: Global Human Settlement Layers, Population Grid 1975-1990-2000-2015 (P2016)',
-  version: 'v1',
+  title: 'GHSL: Global Human Settlement Layers, Population Grid 1975-1990-2000-2015 (P2016) [deprecated]',
+  deprecated: true,
+  version: version,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
     The GHSL relies on the design and implementation of new spatial data mining
@@ -52,15 +53,16 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     the planet.
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id),
+  links: ee.standardLinks(subdir, id) + version_config.version_links,
   keywords: [
     'ciesin_derived',
+    'ghsl',
     'jrc',
     'population',
   ],
   providers: [
     ee.producer_provider('EC JRC', 'https://ghsl.jrc.ec.europa.eu/index.php'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent_global('1975-01-01T00:00:00Z', '2015-12-31T00:00:00Z'),
   summaries: {

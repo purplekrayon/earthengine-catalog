@@ -11,9 +11,6 @@ local license = spdx.proprietary;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -54,9 +51,9 @@ local self_url = catalog_subdir_url + base_filename;
   links: ee.standardLinks(subdir, id) + [
   ],
   keywords: [
+    'cag',
     'climate',
     'cmip5',
-    'csu',
     'geophysical',
     'nasa',
     'nex',
@@ -64,7 +61,7 @@ local self_url = catalog_subdir_url + base_filename;
     'temperature',
   ],
   providers: [
-    ee.producer_provider('NASA / CSU', 'https://cds.nccs.nasa.gov/nex/'),
+    ee.producer_provider('NASA / Climate Analytics Group', 'https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-dcp30'),
     ee.host_provider(self_ee_catalog_url),
   ],
   extent: ee.extent(-125.03, 24.07, -66.47, 49.93,
@@ -97,7 +94,7 @@ local self_url = catalog_subdir_url + base_filename;
           includes both liquid and solid phases from all types of clouds
           (both large-scale and convective)
         |||,
-        'gee:units': 'kg/(m^2*s)',
+        'gee:units': units.rainfall_rate_kg_per_m2_per_s,
       },
       {
         name: 'pr_quartile25',
@@ -106,7 +103,7 @@ local self_url = catalog_subdir_url + base_filename;
           liquid and solid phases from all types of clouds (both large-scale
           and convective)
         |||,
-        'gee:units': 'kg/(m^2*s)',
+        'gee:units': units.rainfall_rate_kg_per_m2_per_s,
       },
       {
         name: 'pr_median',
@@ -114,7 +111,7 @@ local self_url = catalog_subdir_url + base_filename;
           Median of precipitation at surface; includes both liquid and
           solid phases from all types of clouds (both large-scale and convective)
         |||,
-        'gee:units': 'kg/(m^2*s)',
+        'gee:units': units.rainfall_rate_kg_per_m2_per_s,
       },
       {
         name: 'pr_quartile75',
@@ -123,7 +120,7 @@ local self_url = catalog_subdir_url + base_filename;
           liquid and solid phases from all types of clouds (both large-scale
           and convective)
         |||,
-        'gee:units': 'kg/(m^2*s)',
+        'gee:units': units.rainfall_rate_kg_per_m2_per_s,
       },
       {
         name: 'tasmin_mean',
@@ -272,7 +269,7 @@ local self_url = catalog_subdir_url + base_filename;
   'gee:terms_of_use': |||
     This dataset is in the public domain and is available
     without restriction on use and distribution. See [NASA's
-    Earth Science Data & Information Policy](https://science.nasa.gov/earth-science/earth-science-data/data-information-policy)
+    Earth Science Data & Information Policy](https://www.earthdata.nasa.gov/engage/open-data-services-and-software/data-and-information-policy)
     for additional information.
   |||,
 }

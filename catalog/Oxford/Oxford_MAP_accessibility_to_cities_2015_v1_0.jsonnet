@@ -1,20 +1,17 @@
 local id = 'Oxford/MAP/accessibility_to_cities_2015_v1_0';
-local successor_id = 'Oxford/MAP/accessibility_to_healthcare_2019';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/accessibility_to_cities_versions.libsonnet';
+
 local subdir = 'Oxford';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 
 local license = spdx.cc_by_4_0;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local successor_basename = std.strReplace(successor_id, '/', '_');
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -26,7 +23,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   id: id,
   title: 'Accessibility to Cities 2015 [deprecated]',
-  version: 'v1.0',
+  version: version,
   deprecated: true,
   'gee:type': ee_const.gee_type.image,
   description: |||
@@ -65,10 +62,7 @@ local self_url = catalog_subdir_url + base_filename;
     Source dataset credits are as described in the accompanying paper.
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id) + [
-    ee.link.successor(
-        successor_id, catalog_subdir_url + successor_basename + '.json'),
-  ],
+  links: ee.standardLinks(subdir, id) + version_config.version_links,
   keywords: [
     'accessibility',
     'jrc',
@@ -78,7 +72,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   providers: [
     ee.producer_provider('Malaria Atlas Project', 'https://malariaatlas.org/research-project/accessibility-to-cities/'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent(-180.0, -60.0, 180.0, 85.0,
                     '2015-01-01T00:00:00Z', '2016-01-01T00:00:00Z'),
@@ -87,7 +81,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'accessibility',
         description: 'Travel time to the nearest densely-populated area.',
-        'gee:units': 'minutes',
+        'gee:units': units.minute,
         gsd: 927.67,
       },
     ],

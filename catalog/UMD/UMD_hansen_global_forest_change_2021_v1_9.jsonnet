@@ -3,11 +3,12 @@ local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
 local units = import 'units.libsonnet';
 local versions = import 'versions.libsonnet';
-local version_table = import 'UMD_hansen_global_forest_change.libsonnet';
+local version_table = import 'UMD_hansen_global_forest_change_versions.libsonnet';
 
 local subdir = 'UMD';
-local version = 'v1.9';
-local version_config = versions(subdir, version_table, version);
+local id = 'UMD/hansen/global_forest_change_2021_v1_9';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 
 local license = spdx.cc_by_4_0;
 
@@ -19,9 +20,10 @@ local license = spdx.cc_by_4_0;
     ee_const.ext_sci,
     ee_const.ext_ver,
   ],
-  id: version_config.id,
-  title: 'Hansen Global Forest Change v1.9 (2000-2021)',
+  id: id,
+  title: 'Hansen Global Forest Change v1.9 (2000-2021) [deprecated]',
   version: version,
+  deprecated: true,
   'gee:type': ee_const.gee_type.image,
   description: |||
     Results from time-series analysis of Landsat images in characterizing
@@ -36,9 +38,13 @@ local license = spdx.cc_by_4_0;
     for this Version 1.9 update, as well as the associated journal article:
     Hansen, Potapov, Moore, Hancher et al. "High-resolution global maps of
     21st-century forest cover change." Science 342.6160 (2013): 850-853.
+
+    Note that updated versions of this data are available. The newest version,
+    Version 1.10 (produced with data through 2022), is available as
+    UMD/hansen/global_forest_change_2022_v1_10.
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, version_config.id) + [
+  links: ee.standardLinks(subdir, id) + [
     ee.link.license(license.reference)
   ] + version_config.version_links,
   keywords: [
@@ -128,7 +134,7 @@ local license = spdx.cc_by_4_0;
           multispectral imagery from the first available year, typically 2000.
         |||,
         center_wavelength: 0.66,
-        'gee:wavelength': '0.63-0.69μm',
+        'gee:wavelength': '0.63-0.69&micro;m',
       },
       {
         name: 'first_b40',
@@ -137,7 +143,7 @@ local license = spdx.cc_by_4_0;
           multispectral imagery from the first available year, typically 2000.
         |||,
         center_wavelength: 0.835,
-        'gee:wavelength': '0.77-0.90μm',
+        'gee:wavelength': '0.77-0.90&micro;m',
       },
       {
         name: 'first_b50',
@@ -146,7 +152,7 @@ local license = spdx.cc_by_4_0;
           multispectral imagery from the first available year, typically 2000.
         |||,
         center_wavelength: 1.65,
-        'gee:wavelength': '1.55-1.75μm',
+        'gee:wavelength': '1.55-1.75&micro;m',
       },
       {
         name: 'first_b70',
@@ -155,7 +161,7 @@ local license = spdx.cc_by_4_0;
           multispectral imagery from the first available year, typically 2000.
         |||,
         center_wavelength: 2.22,
-        'gee:wavelength': '2.09-2.35μm',
+        'gee:wavelength': '2.09-2.35&micro;m',
       },
       {
         name: 'last_b30',
@@ -165,7 +171,7 @@ local license = spdx.cc_by_4_0;
           year of the study period.
         |||,
         center_wavelength: 0.66,
-        'gee:wavelength': '0.63-0.69μm',
+        'gee:wavelength': '0.63-0.69&micro;m',
       },
       {
         name: 'last_b40',
@@ -175,7 +181,7 @@ local license = spdx.cc_by_4_0;
           year of the study period.
         |||,
         center_wavelength: 0.835,
-        'gee:wavelength': '0.77-0.90μm',
+        'gee:wavelength': '0.77-0.90&micro;m',
       },
       {
         name: 'last_b50',
@@ -185,7 +191,7 @@ local license = spdx.cc_by_4_0;
           year of the study period.
         |||,
         center_wavelength: 1.65,
-        'gee:wavelength': '1.55-1.75μm',
+        'gee:wavelength': '1.55-1.75&micro;m',
       },
       {
         name: 'last_b70',
@@ -195,7 +201,7 @@ local license = spdx.cc_by_4_0;
           year of the study period.
         |||,
         center_wavelength: 2.22,
-        'gee:wavelength': '2.09-2.35μm',
+        'gee:wavelength': '2.09-2.35&micro;m',
       },
       {
         name: 'datamask',

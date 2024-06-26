@@ -5,6 +5,7 @@ local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
 local units = import 'units.libsonnet';
+local COPERNICUS_S5P = import 'COPERNICUS_S5P.libsonnet';
 
 local license = spdx.proprietary;
 
@@ -35,7 +36,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     treatment of clouds as optically uniform layers of light-scattering particles.
     Additionally, the cloud parameters are also provided for a cloud model which
     assumes the cloud to be a Lambertian reflecting boundary.
-    [[More information](http://www.tropomi.eu/data-products/cloud)]
+    [More information.](http://www.tropomi.eu/data-products/cloud)
 
     ### NRTI L3 Product
 
@@ -235,64 +236,38 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'cloud_fraction',
         description: 'Retrieved effective radiometric cloud fraction',
-        'gee:units': 'fraction',
+        'gee:units': units.unspecified_fraction,
       },
       {
         name: 'cloud_top_pressure',
         description: 'Retrieved atmospheric pressure at the level of cloud top',
-        'gee:units': 'Pa',
+        'gee:units': units.pascal,
       },
       {
         name: 'cloud_top_height',
         description: 'Retrieved altitude of the cloud top',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'cloud_base_pressure',
         description: 'Cloud base pressure',
-        'gee:units': 'Pa',
+        'gee:units': units.pascal,
       },
       {
         name: 'cloud_base_height',
         description: 'Cloud base height',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'cloud_optical_depth',
         description: 'Retrieved cloud optical depth',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'surface_albedo',
         description: 'Surface albedo',
       },
-      {
-        name: 'sensor_azimuth_angle',
-        description: 'Azimuth angle of the satellite at the ground pixel location (WGS84); angle\nmeasured East-of-North.',
-        'gee:units': 'degrees',
-      },
-      {
-        name: 'sensor_zenith_angle',
-        description: |||
-          Zenith angle of the satellite at the ground pixel location (WGS84); angle
-          measured away from the vertical.
-        |||,
-        'gee:units': 'degrees',
-      },
-      {
-        name: 'solar_azimuth_angle',
-        description: 'Azimuth angle of the Sun at the ground pixel location (WGS84); angle\nmeasured East-of-North.',
-        'gee:units': 'degrees',
-      },
-      {
-        name: 'solar_zenith_angle',
-        description: |||
-          Zenith angle of the satellite at the ground pixel location (WGS84); angle
-          measured away from the vertical.
-        |||,
-        'gee:units': 'degrees',
-      },
-    ],
+    ] + COPERNICUS_S5P.bands_common,
     'gee:visualizations': [
       {
         display_name: 'RGB',

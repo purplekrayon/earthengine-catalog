@@ -47,7 +47,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.example(id, basename + '_FeatureView'),
+    ee.link.example(id, subdir, basename + '_FeatureView'),
   ],
   keywords: [
     'climate',
@@ -130,7 +130,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         type: ee_const.var_type.string,
       },
       {
-        name: ee_const.rel.source,
+        name: 'source',
         description: 'Entity reporting the data; could be an organization, report, or document,\ngenerally in Romanized form',
         type: ee_const.var_type.string,
       },

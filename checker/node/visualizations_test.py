@@ -121,8 +121,9 @@ class ErrorsVisualizationsTest(test_utils.NodeTest):
         'image_visualization': {},
         'lookat': {'lat': 1, 'lon': 2, 'zoom': 3}}
     self.assert_collection(
-        {'summaries': {'gee:visualizations': [vis, vis, vis, vis, vis]}},
-        'gee:visualizations has too many entries: 5')
+        {'summaries': {'gee:visualizations': [vis] * 51}},
+        'gee:visualizations has too many entries: 51',
+    )
 
   def test_visualization_not_dict(self):
     self.assert_collection(
@@ -269,8 +270,16 @@ class ErrorsVisualizationsTest(test_utils.NodeTest):
         {'summaries': {'gee:visualizations': [{
             'display_name': 'bcd',
             'image_visualization': {},
-            'lookat': {'lat': 3, 'lon': -4, 'zoom': -1}}]}},
-        'zoom must be in [0, 20]')
+            'lookat': {'lat': 3, 'lon': -4, 'zoom': 0}}]}},
+        'zoom must be in [1, 19]; found: 0')
+
+  def test_lookat_missing_zoom_too_large(self):
+    self.assert_collection(
+        {'summaries': {'gee:visualizations': [{
+            'display_name': 'bcd',
+            'image_visualization': {},
+            'lookat': {'lat': 3, 'lon': -4, 'zoom': 20}}]}},
+        'zoom must be in [1, 19]; found: 20')
 
   def test_lookat_bbox_zoom_outside_lat_below(self):
     self.assert_collection(
@@ -280,7 +289,7 @@ class ErrorsVisualizationsTest(test_utils.NodeTest):
                 'display_name': 'bcd',
                 'image_visualization': {},
                 'lookat': {'lat': -50, 'lon': -4, 'zoom': 1}}]}},
-        'lat must be in extent')
+        'lat must be in (-45..45)')
 
   def test_lookat_bbox_zoom_outside_lat_above(self):
     self.assert_collection(
@@ -290,7 +299,7 @@ class ErrorsVisualizationsTest(test_utils.NodeTest):
                 'display_name': 'bcd',
                 'image_visualization': {},
                 'lookat': {'lat': 62, 'lon': -4, 'zoom': 1}}]}},
-        'lat must be in extent')
+        'lat must be in (-45..45)')
 
   def test_lookat_bbox_zoom_outside_lon_below(self):
     self.assert_collection(
@@ -300,7 +309,7 @@ class ErrorsVisualizationsTest(test_utils.NodeTest):
                 'display_name': 'bcd',
                 'image_visualization': {},
                 'lookat': {'lat': 2, 'lon': -167, 'zoom': 1}}]}},
-        'lon must be in extent')
+        'lon must be in (-120..130)')
 
   def test_lookat_bbox_zoom_outside_lon_above(self):
     self.assert_collection(
@@ -310,7 +319,7 @@ class ErrorsVisualizationsTest(test_utils.NodeTest):
                 'display_name': 'bcd',
                 'image_visualization': {},
                 'lookat': {'lat': 2, 'lon': 158, 'zoom': 1}}]}},
-        'lon must be in extent')
+        'lon must be in (-120..130)')
 
   def test_image_with_polygon_visualization(self):
     self.assert_collection(

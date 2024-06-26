@@ -1,3 +1,5 @@
+local units = import 'units.libsonnet';
+
 {
   summaries: {
     gsd: [
@@ -62,7 +64,7 @@
       {
         name: 'MaxFRP',
         description: 'Maximum fire radiative power',
-        'gee:units': 'Megawatts',
+        'gee:units': units.megawatt,
         'gee:scale': 0.1,
       },
       {
@@ -120,11 +122,7 @@
     'gee:visualizations': [
       {
         display_name: 'Fire Mask',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: 6.746, lat: 46.529, zoom: 2},
         image_visualization: {
           band_vis: {
             min: [

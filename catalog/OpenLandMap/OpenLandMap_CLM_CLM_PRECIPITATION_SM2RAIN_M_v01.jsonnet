@@ -4,15 +4,13 @@ local subdir = 'OpenLandMap';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.cc_by_sa_4_0;
 
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -32,7 +30,7 @@ local self_url = catalog_subdir_url + base_filename;
     [Downscaled to 1 km resolution using gdalwarp](https://gitlab.com/openlandmap/global-layers/tree/master/input_layers/clim1km)
     (cubic splines) and an average between [WorldClim](https://www.worldclim.com/version2),
     [CHELSA Climate](https://chelsa-climate.org/),
-    and [IMERG monthly product](ftp://jsimpson.pps.eosdis.nasa.gov/NRTPUB/imerg/gis/) (see, e.g, "3B-MO-L.GIS.IMERG.20180601.V05B.tif").
+    and [IMERG monthly product](https://gpm.nasa.gov/data/imerg) (see, e.g, "3B-MO-L.GIS.IMERG.20180601.V05B.tif").
     3x higher weight is given to the SM2RAIN-ASCAT data since it assumed to be more accurate. Processing steps are available
     [here](https://gitlab.com/openlandmap/global-layers/tree/master/input_layers/clim1km).
     Antarctica is not included.
@@ -47,7 +45,9 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.license('https://opendatacommons.org/licenses/odbl/1-0/'),
+    ee.link.license(license.reference),
+    // TODO(schwehr): Why is ODBL here?
+    ee.link.license(spdx.odbl_1_0.reference),
     {
       rel: ee_const.rel.cite_as,
       href: 'https://doi.org/10.5281/zenodo.1435912',
@@ -74,62 +74,62 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'jan',
         description: 'Jan Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'feb',
         description: 'Feb Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'mar',
         description: 'Mar Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'apr',
         description: 'Apr Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'may',
         description: 'May Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'jun',
         description: 'Jun Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'jul',
         description: 'Jul Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'aug',
         description: 'Aug Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'sep',
         description: 'Sep Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'oct',
         description: 'Oct Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'nov',
         description: 'Nov Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'dec',
         description: 'Dec Precipitation monthly',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
     ],
     'gee:visualizations': [

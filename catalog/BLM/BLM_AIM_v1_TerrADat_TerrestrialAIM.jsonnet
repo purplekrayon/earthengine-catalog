@@ -4,6 +4,7 @@ local subdir = 'BLM';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.cc0_1_0;
 
@@ -64,7 +65,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     partner organizations. They followed the BLM core terrestrial data
     [collection protocols](https://www.ntc.blm.gov/krc/viewresource.php?courseID=281&programAreaId=148).
     Data were captured electronically using the [Database for Inventory,
-    Monitoring, and Assessment](https://jornada.nmsu.edu/monit-assess/dima).
+    Monitoring, and Assessment](https://jornada.nmsu.edu/tools/dima).
     They were managed by the
     data collectors, with oversight from BLM field offices, state
     offices, and the National Operations Center. This dataset has
@@ -72,7 +73,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.example(id, basename + '_FeatureView'),
+    ee.link.example(id, subdir, basename + '_FeatureView'),
     {
       rel: ee_const.rel.source,
       href: 'https://gis.blm.gov/AIMdownload/layerpackages/BLM_AIM_Terrestrial.zip',
@@ -200,7 +201,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           transects per plot).
         |||,
         type: ee_const.var_type.double,
-        units: 'cm',
+        units: units.centimeter,
       },
       {
         name: 'InvAnnForbCover_AH',
@@ -282,7 +283,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           points on 3 transects per plot).
         |||,
         type: ee_const.var_type.double,
-        units: 'cm',
+        units: units.centimeter,
       },
       {
         name: 'InvPlantCover_AH',
@@ -426,7 +427,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           points on 3 transects per plot).
         |||,
         type: ee_const.var_type.double,
-        units: 'cm',
+        units: units.centimeter,
       },
       {
         name: 'NonInvShrubCover_AH',
@@ -483,7 +484,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           Vegetation Height protocol (30 points on 3 transects per plot).
         |||,
         type: ee_const.var_type.double,
-        units: 'cm',
+        units: units.centimeter,
       },
       {
         name: 'PlotID',
@@ -551,7 +552,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           ARTRW8; ARTRW; ARTRT2; ARTRR2; ARTRR4; and SPAR2.
         |||,
         type: ee_const.var_type.double,
-        units: 'cm',
+        units: units.centimeter,
       },
       {
         name: 'SiteID',
@@ -614,7 +615,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           transects per plot).
         |||,
         type: ee_const.var_type.double,
-        units: 'cm',
+        units: units.centimeter,
       },
     ],
     'gee:visualizations': [

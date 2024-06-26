@@ -4,15 +4,15 @@ local subdir = 'JAXA';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
-local license = spdx.proprietary;
+local license = spdx.proprietary {
+  reference: 'https://gportal.jaxa.jp/gpr/index/eula?lang=en',
+};
 
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -47,7 +47,7 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.license('https://gportal.jaxa.jp/gpr/index/eula?lang=en'),
+    ee.link.license(license.reference),
   ],
   keywords: [
     'chla',
@@ -135,7 +135,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'CHLA_AVE',
         description: 'Concentration of the green pigment (chlorophyll-a) in phytoplankton in sea surface layer.',
-        'gee:units': 'mg/m^3',
+        'gee:units': units.density_mg_per_m_cubed,
       },
       {
         name: 'CHLA_QA_flag',

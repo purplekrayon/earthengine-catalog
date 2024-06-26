@@ -4,6 +4,7 @@ local subdir = 'COPERNICUS';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.proprietary;
 
@@ -234,6 +235,11 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         type: ee_const.var_type.string,
       },
       {
+        name: 'platformHeading',
+        description: 'Platform heading relative to North, degrees',
+        type: ee_const.var_type.double,
+      },
+      {
         name: 'instrument',
         description: 'Information related to the instrument on the platform to which acquired the data.',
         type: ee_const.var_type.string,
@@ -415,34 +421,34 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
         name: 'HH',
         description: 'Single co-polarization, horizontal transmit/horizontal receive',
         gsd: 10.0,
-        'gee:units': 'dB',
+        'gee:units': units.decibel,
         'gee:polarization': 'HH',
       },
       {
         name: 'HV',
         description: 'Dual-band cross-polarization, horizontal transmit/vertical receive',
         gsd: 10.0,
-        'gee:units': 'dB',
+        'gee:units': units.decibel,
         'gee:polarization': 'HV',
       },
       {
         name: 'VV',
         description: 'Single co-polarization, vertical transmit/vertical receive',
         gsd: 10.0,
-        'gee:units': 'dB',
+        'gee:units': units.decibel,
         'gee:polarization': 'VV',
       },
       {
         name: 'VH',
         description: 'Dual-band cross-polarization, vertical transmit/horizontal receive',
         gsd: 10.0,
-        'gee:units': 'dB',
+        'gee:units': units.decibel,
         'gee:polarization': 'VH',
       },
       {
         name: 'angle',
         description: 'Approximate incidence angle from ellipsoid',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         gsd: 20000,
       },
     ],
@@ -498,7 +504,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
   'gee:interval': {
     type: 'revisit_interval',
     unit: 'day',
-    interval: 3,
+    // 6 days in the best case when two S1 satellites are up.
+    interval: 6,
   },
   'gee:terms_of_use': |||
     The use of Sentinel data is governed by the [Copernicus

@@ -5,12 +5,13 @@ local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
 local units = import 'units.libsonnet';
+local versions = import 'versions.libsonnet';
+local version_table = import 'RUB_RUBCLIM_LCZ_global_lcz_map_versions.libsonnet';
 
 local license = spdx.proprietary;
 
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 
 {
   stac_version: ee_const.stac_version,
@@ -21,7 +22,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'Global map of Local Climate Zones',
+  title: 'Global map of Local Climate Zones, v1 [deprecated]',
+  deprecated: true,
   version: 'v1',
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
@@ -63,7 +65,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     * [LCZ Gaussian filtering](https://doi.org/10.1038/s41597-020-00605-z)
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id) + [
+  links: ee.standardLinks(subdir, id) +
+   version_config.version_links + [
     {
       rel: ee_const.rel.source,
       href: 'https://doi.org/10.5194/essd-14-3835-2022',
@@ -85,7 +88,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee.producer_provider(
         'Bochum Urban Climate Lab',
         'https://lcz-generator.rub.de/global-lcz-map'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent_global('2018-01-01T00:00:00Z', '2019-01-01T00:00:00Z'),
   summaries: {
@@ -307,23 +310,23 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
               17,
             ],
             palette: [
-              '#8c0000',
-              '#d10000',
-              '#ff0000',
-              '#bf4d00',
-              '#ff6600',
-              '#ff9955',
-              '#faee05',
-              '#bcbcbc',
-              '#ffccaa',
-              '#555555',
-              '#006a00',
-              '#00aa00',
-              '#648525',
-              '#b9db79',
-              '#000000',
-              '#fbf7ae',
-              '#6a6aff'
+              '8c0000',
+              'd10000',
+              'ff0000',
+              'bf4d00',
+              'ff6600',
+              'ff9955',
+              'faee05',
+              'bcbcbc',
+              'ffccaa',
+              '555555',
+              '006a00',
+              '00aa00',
+              '648525',
+              'b9db79',
+              '000000',
+              'fbf7ae',
+              '6a6aff'
             ],
             bands: [
               'LCZ_Filter',
@@ -334,9 +337,6 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ],
   },
   'sci:doi': '10.5281/zenodo.6364593',
-  'gee:extra_dois': [
-    '10.5194/essd-14-3835-2022',
-  ],
   'sci:citation': |||
     Demuzere M.; Kittner J.; Martilli A.; Mills, G.; Moede, C.; Stewart, I.D.; van Vliet, J.; Bechtel, B.
     A global map of local climate zones to support earth system modelling and urban-scale environmental science.

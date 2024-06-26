@@ -12,9 +12,6 @@ local license = spdx.odbl_1_0;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -114,7 +111,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'elv',
         description: 'Elevation',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'dir',
@@ -148,7 +145,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'upa',
         description: 'Upstream drainage area (flow accumulation area)',
-        'gee:units': 'km^2',
+        'gee:units': units.square_km,
       },
       {
         name: 'upg',
@@ -165,7 +162,7 @@ local self_url = catalog_subdir_url + base_filename;
           above EGM96 geoid is represented in meters, and the vertical increment is set to
           10cm. For detailed method, see [Yamazaki et al., 2012, WRR].
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'viswth',
@@ -195,7 +192,7 @@ local self_url = catalog_subdir_url + base_filename;
     MERIT Hydro: A high-resolution global hydrography map based on latest
     topography datasets
     Water Resources Research, vol.55, pp.5053-5073, 2019,
-    [doi:10.1029/2019WR024873](https://doi.org/10.1029/2019WR024873]
+    [doi:10.1029/2019WR024873](https://doi.org/10.1029/2019WR024873)
   |||,
   'gee:terms_of_use': |||
     Citation to the paper is adequate if you simply use MERIT Hydro. If you

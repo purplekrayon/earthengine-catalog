@@ -5,6 +5,7 @@ local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
 local units = import 'units.libsonnet';
+local COPERNICUS_S5P = import 'COPERNICUS_S5P.libsonnet';
 
 local license = spdx.proprietary;
 
@@ -42,8 +43,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     being used for generating the operational total ozone products from GOME,
     SCIAMACHY and GOME-2; while GODFIT is being used in the ESA CCI and the
     Copernicus C3S projects.
-    [More information](http://www.tropomi.eu/data-products/total-ozone-column).
-    [Product user manual](https://sentinel.esa.int/documents/247904/2474726/Sentinel-5P-Level-2-Product-User-Manual-Ozone-Total-Column)
+    [More information.](http://www.tropomi.eu/data-products/total-ozone-column)
+    [Product user manual.](https://sentinel.esa.int/documents/247904/2474726/Sentinel-5P-Level-2-Product-User-Manual-Ozone-Total-Column)
 
     ### NRTI L3 Product
 
@@ -265,35 +266,9 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           Effective cloud fraction.  See the [Sentinel 5P L2 Input/Output Data Definition Spec](https://sentinels.copernicus.eu/documents/247904/3119978/Sentinel-5P-Level-2-Input-Output-Data-Definition),
           p.220.
         |||,
-        'gee:units': 'fraction',
+        'gee:units': units.unspecified_fraction,
       },
-      {
-        name: 'sensor_azimuth_angle',
-        description: 'Azimuth angle of the satellite at the ground pixel location (WGS84); angle\nmeasured East-of-North.',
-        'gee:units': 'degrees',
-      },
-      {
-        name: 'sensor_zenith_angle',
-        description: |||
-          Zenith angle of the satellite at the ground pixel location (WGS84); angle
-          measured away from the vertical.
-        |||,
-        'gee:units': 'degrees',
-      },
-      {
-        name: 'solar_azimuth_angle',
-        description: 'Azimuth angle of the Sun at the ground pixel location (WGS84); angle\nmeasured East-of-North.',
-        'gee:units': 'degrees',
-      },
-      {
-        name: 'solar_zenith_angle',
-        description: |||
-          Zenith angle of the satellite at the ground pixel location (WGS84); angle
-          measured away from the vertical.
-        |||,
-        'gee:units': 'degrees',
-      },
-    ],
+    ] + COPERNICUS_S5P.bands_common,
     'gee:visualizations': [
       {
         display_name: 'RGB',

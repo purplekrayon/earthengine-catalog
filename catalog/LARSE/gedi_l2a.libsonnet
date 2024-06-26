@@ -79,19 +79,19 @@ local units = import 'units.libsonnet';
     {
       name: 'delta_time',
       description: 'Time delta since Jan 1 00:00 2018',
-      'gee:units': 'Seconds',
+      'gee:units': 'seconds',
       type:: ee_const.var_type.double,
     },
     {
       name: 'digital_elevation_model',
       description: 'TanDEM-X elevation at GEDI footprint location',
-      'gee:units': units.meters,
+      'gee:units': units.meter,
       type:: ee_const.var_type.double,
     },
     {
       name: 'digital_elevation_model_srtm',
       description: 'STRM elevation at GEDI footprint location',
-      'gee:units': units.meters,
+      'gee:units': units.meter,
       type:: ee_const.var_type.double,
     },
     {
@@ -100,7 +100,7 @@ local units = import 'units.libsonnet';
         Elevation of highest detected return relative
         to reference ellipsoid
       |||,
-      'gee:units': units.meters,
+      'gee:units': units.meter,
       type:: ee_const.var_type.double,
     },
     {
@@ -108,7 +108,7 @@ local units = import 'units.libsonnet';
       description: |||
         Elevation of center of lowest mode relative to reference ellipsoid
       |||,
-      'gee:units': units.meters,
+      'gee:units': units.meter,
       type:: ee_const.var_type.double,
     },
     {
@@ -146,7 +146,7 @@ local units = import 'units.libsonnet';
     {
       name: 'lat_highestreturn',
       description: 'Latitude of highest detected return',
-      'gee:units': 'Degree',
+      'gee:units': units.degree,
       type:: ee_const.var_type.double,
     },
     {
@@ -175,7 +175,7 @@ local units = import 'units.libsonnet';
     {
       name: 'lon_highestreturn',
       description: 'Longitude of highest detected return',
-      'gee:units': 'Degree',
+      'gee:units': units.degree,
       type:: ee_const.var_type.double,
     },
     {
@@ -248,7 +248,11 @@ local units = import 'units.libsonnet';
     },
     {
       name: 'sensitivity',
-      description: 'Maxmimum canopy cover that can be penetrated',
+      description: |||
+          Maxmimum canopy cover that can be penetrated. Valid range is [0, 1].
+          Values outside of this range may be present but must be ignored.
+          They represent noise and non-land surface waveforms.
+      |||,
       type:: ee_const.var_type.double,
     },
     {
@@ -283,7 +287,7 @@ local units = import 'units.libsonnet';
         The focal window size used to calculate urban_proportion. Values are 3
         (3x3 pixel window size) or 5 (5x5 pixel window size).
       |||,
-      'gee:units': 'pixels',
+      'gee:units': units.pixel,
       type:: ee_const.var_type.int,
     },
     {
@@ -315,7 +319,7 @@ local units = import 'units.libsonnet';
         Azimuth in radians of the unit pointing vector for the laser in the
         local ENU frame. The angle is measured from North and positive towards East.
       |||,
-      'gee:units': 'radians',
+      'gee:units': units.radian,
       type:: ee_const.var_type.double,
     },
     {
@@ -324,7 +328,7 @@ local units = import 'units.libsonnet';
         Elevation in radians of the unit pointing vector for the laser in the
         local ENU frame. The angle is measured from North and positive towards East.
       |||,
-      'gee:units': 'radians',
+      'gee:units': units.radian,
       type:: ee_const.var_type.double,
     },
   ],
@@ -332,7 +336,7 @@ local units = import 'units.libsonnet';
     {
       name: 'rh' + step,
       description: 'Relative height metrics at ' + step + units.percent,
-      'gee:units': units.meters,
+      'gee:units': units.meter,
       type:: ee_const.var_type.double,
     }
     for step in std.range(0, 100)
@@ -357,7 +361,7 @@ local units = import 'units.libsonnet';
     This dataset is in the public domain and is available
     without restriction on use and distribution. See [NASA's
     Earth Science Data & Information Policy]
-    (https://science.nasa.gov/earth-science/earth-science-data/data-information-policy)
+    (https://www.earthdata.nasa.gov/engage/open-data-services-and-software/data-and-information-policy)
     for additional information.
   |||,
 }

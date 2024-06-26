@@ -184,7 +184,7 @@ local units = import 'units.libsonnet';
       {
         name: 'Local_Solar_Noon',
         description: 'Local solar noon zenith angle',
-        'gee:units': 'degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'Percent_Inputs',
@@ -213,11 +213,7 @@ local units = import 'units.libsonnet';
     'gee:visualizations': [
       {
         display_name: 'Black-Sky Albedo',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: 6.746, lat: 46.529, zoom: 6},
         image_visualization: {
           band_vis: {
             min: [

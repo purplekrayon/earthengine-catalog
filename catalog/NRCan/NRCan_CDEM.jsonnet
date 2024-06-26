@@ -11,9 +11,6 @@ local license = spdx.ogl_canada_2_0;
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -39,7 +36,7 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.license('https://open.canada.ca/en/open-government-licence-canada'),
+    ee.link.license(license.reference),
     {
       rel: ee_const.rel.source,
       href: 'https://ftp.geogratis.gc.ca/pub/nrcan_rncan/elevation/cdem_mnec/',
@@ -68,7 +65,7 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'elevation',
         description: 'Elevation',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
     ],
     'gee:visualizations': [

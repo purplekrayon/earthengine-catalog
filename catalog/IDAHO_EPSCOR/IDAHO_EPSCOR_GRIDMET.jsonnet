@@ -90,17 +90,17 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'sph',
         description: 'Specific humididy',
-        'gee:units': 'kg/kg',
+        'gee:units': units.mass_fraction,
       },
       {
         name: 'srad',
         description: 'Surface downward shortwave radiation',
-        'gee:units': 'W/m^2',
+        'gee:units': units.watt_per_meter_squared,
       },
       {
         name: 'th',
         description: 'Wind direction',
-        'gee:units': 'Degrees clockwise from North',
+        'gee:units': units.degree,
       },
       {
         name: 'tmmn',
@@ -115,7 +115,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'vs',
         description: 'Wind velocity at 10m',
-        'gee:units': 'm/s',
+        'gee:units': units.velocity_si,
       },
       {
         name: 'erc',
@@ -124,8 +124,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       },
       {
         name: 'eto',
-        description: 'Daily reference evapotranspiration',
-        'gee:units': 'grass, mm',
+        description: 'Daily grass reference evapotranspiration',
+        'gee:units': units.millimeter,
       },
       {
         name: 'bi',
@@ -144,13 +144,13 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       },
       {
         name: 'etr',
-        description: 'Daily reference evapotranspiration',
-        'gee:units': 'Alfalfa, mm',
+        description: 'Daily alfalfa reference evapotranspiration',
+        'gee:units': units.millimeter,
       },
       {
         name: 'vpd',
         description: 'Mean vapor pressure deficit',
-        'gee:units': 'kPa',
+        'gee:units': units.kilopascal,
       },
     ],
     'gee:visualizations': [

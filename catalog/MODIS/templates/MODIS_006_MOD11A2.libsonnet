@@ -119,13 +119,13 @@ local units = import 'units.libsonnet';
       {
         name: 'Day_view_time',
         description: 'Local time of day observation',
-        'gee:units': 'Hours',
+        'gee:units': units.hour,
         'gee:scale': 0.1,
       },
       {
         name: 'Day_view_angl',
         description: 'View zenith angle of day observation',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         'gee:offset': -65.0,
       },
       {
@@ -238,13 +238,13 @@ local units = import 'units.libsonnet';
       {
         name: 'Night_view_time',
         description: 'Local time of night observation',
-        'gee:units': 'Hours',
+        'gee:units': units.hour,
         'gee:scale': 0.1,
       },
       {
         name: 'Night_view_angl',
         description: 'View zenith angle of night observation',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         'gee:offset': -65.0,
       },
       {
@@ -521,11 +521,7 @@ local units = import 'units.libsonnet';
     'gee:visualizations': [
       {
         display_name: 'Land Surface Temperature',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: 6.746, lat: 46.529, zoom: 2},
         image_visualization: {
           band_vis: {
             min: [

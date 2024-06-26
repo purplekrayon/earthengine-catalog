@@ -1,20 +1,17 @@
-local id = 'USFS/GTAC/LCMS/v2020-6';
-local latest_id = id;
-local subdir = 'USFS';
-
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local versions = import 'versions.libsonnet';
+local version_table = import 'USFS_GTAC_LCMS_PRUSVI_versions.libsonnet';
+
+local subdir = 'USFS';
+local id = 'USFS/GTAC/LCMS/v2020-6';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
+local basename = std.strReplace(id, '/', '_');
+local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
 
 local license = spdx.proprietary;
-
-local basename = std.strReplace(id, '/', '_');
-local latest_basename = std.strReplace(latest_id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -25,32 +22,40 @@ local self_url = catalog_subdir_url + base_filename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'USFS Landscape Change Monitoring System v2020.6 (Puerto Rico - US Virgin Islands only)',
-  version: 'v2020.6',
+  title:
+    'USFS Landscape Change Monitoring System ' + version + ' ' +
+    '(Puerto Rico - US Virgin Islands only) [deprecated]',
+  version: version,
+  deprecated: true,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
-    This product is part of the Landscape Change Monitoring System (LCMS) data suite.
-    It shows LCMS-modeled change, land cover, and/or land use classes for each year.
+    This product is part of the Landscape Change Monitoring System (LCMS) data
+    suite. It shows LCMS-modeled change, land cover, and/or land use classes
+    for each year. This LCMS version covers Puerto Rico U.S. Virgin Islands (PRUSVI).
 
-    LCMS is a remote sensing-based system for mapping and monitoring landscape change across the
-    United States. Its objective is to develop a consistent approach using the latest technology
-    and advancements in change detection to produce a "best available" map of landscape change.
+    LCMS is a remote sensing-based system for mapping and monitoring landscape
+    change across the United States. Its objective is to develop a consistent
+    approach using the latest technology and advancements in change detection to
+    produce a "best available" map of landscape change.
 
     Outputs include three annual products: change, land cover, and land use.
-    Change relates specifically to vegetation cover and includes slow loss, fast loss (which also
-    includes hydrologic changes such as inundation or desiccation), and gain. These values are
-    predicted for each year of the Landsat time series and serve as the foundational products for
-    LCMS. Land cover and land use maps depict life-form level land cover and broad-level land use
-    for each year.
+    Change relates specifically to vegetation cover and includes slow loss, fast
+    loss (which also includes hydrologic changes such as inundation or
+    desiccation), and gain. These values are predicted for each year of the
+    Landsat time series and serve as the foundational products for LCMS. Land
+    cover and land use maps depict life-form level land cover and broad-level
+    land use for each year.
 
-    Because no algorithm performs best in all situations, LCMS uses an ensemble of models as
-    predictors, which improves map accuracy across a range of ecosystems and change processes
-    (Healey et al., 2018). The resulting suite of LCMS change, land cover, and land use maps offer
-    a holistic depiction of landscape change across the United States over the past four decades.
+    Because no algorithm performs best in all situations, LCMS uses an ensemble
+    of models as predictors, which improves map accuracy across a range of
+    ecosystems and change processes (Healey et al., 2018). The resulting suite
+    of LCMS change, land cover, and land use maps offer a holistic depiction of
+    landscape change across the United States over the past four decades.
 
-    Predictor layers for the LCMS model include outputs
-    from the LandTrendr and CCDC change detection algorithms, and terrain information. These
-    components are all accessed and processed using Google Earth Engine (Gorelick et al., 2017).
+    Predictor layers for the LCMS model include outputs from the LandTrendr and
+    CCDC change detection algorithms, and terrain information. These components
+    are all accessed and processed using Google Earth Engine (Gorelick et al.,
+    2017).
 
     Landsat Tier 1 and Sentinel 2A, 2B Level-1C top of atmosphere reflectance
     data are used directly in CCDC and to produce annual composites for
@@ -61,11 +66,11 @@ local self_url = catalog_subdir_url + base_filename;
     LandTrendr, the annual medoid is then computed to summarize cloud and cloud
     shadow-free values from each year into a single composite.
 
-    The composite time series is temporally segmented using LandTrendr
-    (Kennedy et al., 2010; Kennedy et al., 2018; Cohen et al., 2018).
+    The composite time series is temporally segmented using LandTrendr (Kennedy
+    et al., 2010; Kennedy et al., 2018; Cohen et al., 2018).
 
-    All cloud and cloud shadow free values are also temporally segmented using the CCDC algorithm
-    (Zhu and Woodcock, 2014).
+    All cloud and cloud shadow free values are also temporally segmented using
+    the CCDC algorithm (Zhu and Woodcock, 2014).
 
     The raw composite values, LandTrendr fitted values, pair-wise differences,
     segment duration, change magnitude, and slope, and CCDC September 1 sine and
@@ -78,7 +83,8 @@ local self_url = catalog_subdir_url + base_filename;
     (Breiman, 2001) model.
 
     Reference data are collected using TimeSync, a web-based tool that helps
-    analysts visualize and interpret the Landsat data record from 1984-present (Cohen et al., 2010).
+    analysts visualize and interpret the Landsat data record from 1984-present
+    (Cohen et al., 2010).
 
     **Additional Resources**
 
@@ -171,14 +177,8 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.license(
-        'https://data.fs.usda.gov/geodata/rastergateway/LCMS/index.php'),
-    {
-      rel: ee_const.rel.source,
-      href: 'https://data.fs.usda.gov/geodata/rastergateway/LCMS',
-    },
-    ee.link.latest(latest_id, catalog_subdir_url + latest_basename + '.json'),
-  ],
+    ee.link.license('https://data.fs.usda.gov/geodata/rastergateway/LCMS/index.php')
+  ] + version_config.version_links,
   keywords: [
     'change',
     'change_detection',
@@ -251,7 +251,7 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 5,
-            color: '1B1716',
+            color: '1b1716',
             description: 'Non-Processing Area Mask',
           },
         ],
@@ -323,7 +323,7 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 11,
-            color: 'AA7700',
+            color: 'aa7700',
             description: 'Barren & Grass/Forb/Herb Mix',
           },
           {
@@ -343,7 +343,7 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 15,
-            color: '1B1716',
+            color: '1b1716',
             description: 'Non-Processing Area Mask',
           },
         ],
@@ -391,7 +391,7 @@ local self_url = catalog_subdir_url + base_filename;
           },
           {
             value: 7,
-            color: '1B1716',
+            color: '1b1716',
             description: 'Non-Processing Area Mask',
           },
         ],
@@ -716,7 +716,7 @@ local self_url = catalog_subdir_url + base_filename;
               'f39268',
               'd54309',
               '00a398',
-              '1B1716',
+              '1b1716',
               'b30088',
             ],
             bands: [
@@ -751,11 +751,11 @@ local self_url = catalog_subdir_url + base_filename;
               'ffad33',
               'ffe0b3',
               'ffff00',
-              'AA7700',
+              'aa7700',
               'd3bf9b',
               'ffffff',
               '4780f3',
-              '1B1716',
+              '1b1716',
             ],
             bands: [
               'Land_Cover',
@@ -783,7 +783,7 @@ local self_url = catalog_subdir_url + base_filename;
               'f39268',
               'd54309',
               '00a398',
-              '1B1716',
+              '1b1716',
             ],
             bands: [
               'Land_Use',
@@ -798,20 +798,24 @@ local self_url = catalog_subdir_url + base_filename;
     v2020.6 (Puerto Rico - US Virgin Islands only). Salt Lake City, Utah.
   |||,
   'gee:terms_of_use': |||
-    The USDA Forest Service makes no warranty, expressed or implied, including the warranties of
-    merchantability and fitness for a particular purpose, nor assumes any legal liability or
-    responsibility for the accuracy, reliability, completeness or utility of these geospatial data,
-    or for the improper or incorrect use of these geospatial data. These geospatial data and
-    related maps or graphics are not legal documents and are not intended to be used as such. The
-    data and maps may not be used to determine title, ownership, legal descriptions or boundaries,
-    legal jurisdiction, or restrictions that may be in place on either public or private land.
-    Natural hazards may or may not be depicted on the data and maps, and land users should exercise
-    due caution. The data are dynamic and may change over time. The user is responsible to verify
-    the limitations of the geospatial data and to use the data accordingly.
+    The USDA Forest Service makes no warranty, expressed or implied, including
+    the warranties of merchantability and fitness for a particular purpose, nor
+    assumes any legal liability or responsibility for the accuracy, reliability,
+    completeness or utility of these geospatial data, or for the improper or
+    incorrect use of these geospatial data. These geospatial data and related
+    maps or graphics are not legal documents and are not intended to be used as
+    such. The data and maps may not be used to determine title, ownership, legal
+    descriptions or boundaries, legal jurisdiction, or restrictions that may be
+    in place on either public or private land.  Natural hazards may or may not
+    be depicted on the data and maps, and land users should exercise due
+    caution. The data are dynamic and may change over time. The user is
+    responsible to verify the limitations of the geospatial data and to use the
+    data accordingly.
 
-    These data were collected using funding from the U.S. Government and can be used
-    without additional permissions or fees. If you use these data in a publication, presentation, or
-    other research product please use the following citation:
+    These data were collected using funding from the U.S. Government and can be
+    used without additional permissions or fees. If you use these data in a
+    publication, presentation, or other research product please use the
+    following citation:
 
     USDA Forest Service. 2021. USFS Landscape Change Monitoring System v2020.6
     (Puerto Rico - US Virgin Islands only). Salt Lake City, Utah.

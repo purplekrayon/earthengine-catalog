@@ -100,22 +100,22 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'huss',
         description: 'Monthly average of mean daily specific humidity near surface',
-        'gee:units': 'kg/kg',
+        'gee:units': units.mass_fraction,
       },
       {
         name: 'pr',
         description: 'Total monthly precipitation amount at surface',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'rsds',
         description: 'Monthly average of mean daily downward shortwave radiation at surface',
-        'gee:units': 'W/m^2',
+        'gee:units': units.watt_per_meter_squared,
       },
       {
         name: 'was',
         description: 'Monthly average of mean daily near surface wind speed',
-        'gee:units': 'm/s',
+        'gee:units': units.velocity_si,
       },
     ],
     'gee:visualizations': [

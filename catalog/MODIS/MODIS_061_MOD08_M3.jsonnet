@@ -1,16 +1,15 @@
 local id = 'MODIS/061/MOD08_M3';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/MOD08_M3_versions.libsonnet';
+
 local subdir = 'MODIS';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
-
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 local license = spdx.proprietary;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
 
 {
   stac_version: ee_const.stac_version,
@@ -22,7 +21,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
   ],
   id: id,
   title: 'MOD08_M3.061 Terra Atmosphere Monthly Global Product',
-  version: 'V061',
+  version: version,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
     MOD08_M3 V6.1 is an atmosphere global product that contains
@@ -51,7 +50,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
       rel: ee_const.rel.cite_as,
       href: 'https://doi.org/10.5067/MODIS/MOD08_M3.061',
     },
-  ],
+  ] + version_config.version_links,
   keywords: [
     'atmosphere',
     'geophysical',
@@ -67,7 +66,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
   ],
   providers: [
     ee.producer_provider('NASA LAADS DAAC at NASA Goddard Space Flight Center', 'https://doi.org/10.5067/MODIS/MOD08_M3.061'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   'gee:provider_ids': [
     'C1443766359-LAADS',
@@ -152,11 +151,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
     'gee:visualizations': [
       {
         display_name: 'Aerosol Optical Depth',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: 6.746, lat: 46.529, zoom: 2},
         image_visualization: {
           band_vis: {
             min: [
@@ -243,7 +238,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
   'gee:terms_of_use': |||
     This dataset is in the public domain and is available
     without restriction on use and distribution. See
-    [NASA\'s Earth Science Data & Information Policy](https://science.nasa.gov/earth-science/earth-science-data/data-information-policy)
+    [NASA\'s Earth Science Data & Information Policy](https://www.earthdata.nasa.gov/engage/open-data-services-and-software/data-and-information-policy)
     for additional information.
   |||,
 }

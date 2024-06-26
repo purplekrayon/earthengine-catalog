@@ -4,15 +4,13 @@ local subdir = 'TIGER';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.proprietary;
 
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -62,7 +60,7 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.example(id, basename + '_FeatureView'),
+    ee.link.example(id, subdir, basename + '_FeatureView'),
     {
       rel: ee_const.rel.source,
       href: 'ftp://ftp2.census.gov/geo/tiger/TIGER2018/COUNTY/tl_2018_us_county.zip',
@@ -86,13 +84,13 @@ local self_url = catalog_subdir_url + base_filename;
         name: 'ALAND',
         description: 'Land area',
         type: ee_const.var_type.double,
-        units: 'm^2',
+        units: units.square_m,
       },
       {
         name: 'AWATER',
         description: 'Water area',
         type: ee_const.var_type.double,
-        units: 'm^2',
+        units: units.square_m,
       },
       {
         name: 'CBSAFP',

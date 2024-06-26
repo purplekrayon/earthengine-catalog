@@ -1,9 +1,11 @@
 local id = 'JAXA/ALOS/PALSAR/YEARLY/SAR_EPOCH';
 local subdir = 'JAXA';
+local version = '2';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.proprietary;
 
@@ -20,23 +22,26 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'Global PALSAR-2/PALSAR Yearly Mosaic',
+  title: 'Global PALSAR-2/PALSAR Yearly Mosaic, version ' + version,
   'gee:type': ee_const.gee_type.image_collection,
-  version: '2.1.2',
+  version: version,
   description: |||
     The global 25m PALSAR/PALSAR-2 mosaic is a seamless global
     SAR image created by mosaicking strips of SAR imagery
     from PALSAR/PALSAR-2. For each year and location,
     the strip data were selected through visual inspection of the
     browse mosaics available over the period, with those showing minimum
-    response to surface moisture preferentially used. In cases
-    where the availability was limited (e.g., because of the requirement
-    for observations during specific emergencies), data were necessarily
-    selected from the year before or after, including from 2006.
-    [Shimada et al. 2014](https://doi.org/10.1016/j.rse.2014.04.014)
+    response to surface moisture preferentially used.
+    Only data from the target year have been used for each annual mosaic,
+    and hence no gap-filling using data from previous years in case of gaps
+    in the annual global coverage.
 
-    The SAR imagery was ortho-rectificatied and slope corrected
-    using the 90m SRTM Digital Elevation Model.
+    There is no data for 2011-2014 due to the gap between ALOS and ALOS-2
+    temporal coverage.
+
+    The SAR imagery was ortho-rectificatied and slope corrected using the
+    digital surface model ALOS World 3D - 30m (AW3D30).
+
     A destriping process (Shimada & Isoguchi, 2002, 2010) was applied
     to equalize the intensity differences between neighboring strips,
     occurring largely due to seasonal and daily differences
@@ -46,7 +51,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     The DN values can be converted to gamma naught values
     in decibel unit (dB) using the following equation:
 
-      *    γ₀ = 10log₁₀(DN²) - 83.0 dB
+      *    &#947;&#8320; = 10log&#8321;&#8320;(DN&#178;) - 83.0 dB
 
     Attention:
 
@@ -72,7 +77,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee.producer_provider('JAXA EORC', 'https://www.eorc.jaxa.jp/ALOS/en/dataset/fnf_e.htm'),
     ee.host_provider(self_ee_catalog_url),
   ],
-  extent: ee.extent_global('2015-01-01T00:00:00Z', '2022-01-01T00:00:00Z'),
+  extent: ee.extent_global('2015-01-01T00:00:00Z',null),
   summaries: {
     gsd: [
       25.0,
@@ -88,7 +93,8 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       },
       {
         name: 'angle',
-        description: 'Local incidence angle (degrees).',
+        description: 'Local incidence angle.',
+        'gee:units': units.degree,
       },
       {
         name: 'epoch',
@@ -110,12 +116,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           },
           {
             value: 50,
-            color: '0000FF',
+            color: '0000ff',
             description: 'Ocean and water',
           },
           {
             value: 100,
-            color: 'AAAA00',
+            color: 'aaaa00',
             description: 'Radar layover',
           },
           {
@@ -125,7 +131,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           },
           {
             value: 255,
-            color: 'AA9988',
+            color: 'aa9988',
             description: 'Land',
           },
         ],

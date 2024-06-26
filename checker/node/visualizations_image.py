@@ -19,8 +19,8 @@ The requirement and components for this section:
     - gain: Number by which to multiply each pixel value
     - bias: Number to add to each value (after multiplying by gain)
     - palette: A list of CSS style strings. There may be from 1 to 250 colors.
-      CSS '#rgb' colors are not allowed, e.g. '0f0'.  A leading '#' is currently
-      allowed, but is discouraged. Each color entry is one of:
+      CSS 'rgb' colors are not allowed, e.g. '0f0'.  A leading '#' is not
+      allowed. Each color entry is one of:
       - 'rrggbb': 6 character hex
       - 'rrggbbaa': 8 character hex with transparency (alpha)
       - 'color': A supported color name, e.g. 'red'
@@ -68,6 +68,9 @@ image_visualization: {
     max: [60.0],
     palette: ['red', 'orange', 'green'],
     bands: ['rh98']}},
+
+See also:
+- https://developers.google.com/earth-engine/guides/image_visualization
 """
 
 import re
@@ -247,10 +250,10 @@ class Check(stac.NodeCheck):
               yield cls.new_issue(node, f'{GAMMA} value must be a number')
               break
 
-            if gamma < GAMMA_MIN or gamma > GAMMA_MAX:
+            if not GAMMA_MIN <= gamma <= GAMMA_MAX:
               yield cls.new_issue(
                   node,
-                  f'{GAMMA} must be in the range of {GAMMA_MIN}..{GAMMA_MAX}')
+                  f'{GAMMA} must be in the range of [{GAMMA_MIN}..{GAMMA_MAX}]')
 
       if GAIN in band_viz:
         gain_list = band_viz[GAIN]
@@ -270,10 +273,10 @@ class Check(stac.NodeCheck):
                 break
 
               # TODO(schwehr): Consider refactoring this type of check.
-              if gain < GAIN_MIN or gain > GAIN_MAX:
+              if not GAIN_MIN <= gain <= GAIN_MAX:
                 yield cls.new_issue(
                     node,
-                    f'{GAIN} must be in the range of {GAIN_MIN}..{GAIN_MAX}')
+                    f'{GAIN} must be in the range of [{GAIN_MIN}..{GAIN_MAX}]')
 
       if BIAS in band_viz:
         bias_list = band_viz[BIAS]
@@ -299,10 +302,20 @@ class Check(stac.NodeCheck):
           yield cls.new_issue(
               node, f'{PALETTE} size should be <= {MAX_PALETTE_SIZE}')
         else:
+          have_name = False
+          have_hex = False
           for color in palette_list:
-            if not re.fullmatch(r'#?[0-9a-fA-F]{6}([0-9a-fA-F]{2})?', color):
-              if color not in COLOR_NAMES:
-                yield cls.new_issue(
-                    node,
-                    'color must be a 6 (or 8) character hex or ' +
-                    f'color name - found "{color}"')
+            if color in COLOR_NAMES:
+              have_name = True
+            elif re.fullmatch(r'[0-9a-fA-F]{6}', color):
+              have_hex = True
+            else:
+              yield cls.new_issue(
+                  node,
+                  'color must be a 6 character hex or ' +
+                  f'color name - found "{color}"')
+          if have_name and have_hex:
+            yield cls.new_issue(
+                node,
+                'colors must be all hex or all color names. '
+                'Found a mix of both')

@@ -89,9 +89,12 @@ class Check(stac.TreeCheck):
               f'catalog_url != parent_url: {catalog_url} {a_parent_url}')
         elif node.stac.get(GEE_SKIP_INDEXING):
           message = (
-              f'Child link when {GEE_SKIP_INDEXING} is true: '
-              f'{catalog_url} {a_self_url}')
+              "Please don't reference in catalog.jsonnet datasets that have "
+              f'{GEE_SKIP_INDEXING} set to true: '
+              f'{catalog_url} {a_self_url}'
+          )
           yield cls.new_issue(node, message)
       else:
-        if node.id != GEE_CATALOG and not node.stac.get(GEE_SKIP_INDEXING):
+        if (node.id != GEE_CATALOG and not node.stac.get(GEE_SKIP_INDEXING) and
+            not node.id.startswith('TEMPLATE')):
           yield cls.new_issue(node, 'Not in any catalog as a child link')

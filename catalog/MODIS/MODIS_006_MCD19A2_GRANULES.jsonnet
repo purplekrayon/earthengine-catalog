@@ -1,17 +1,15 @@
 local id = 'MODIS/006/MCD19A2_GRANULES';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/MCD19A2_GRANULES_versions.libsonnet';
 local subdir = 'MODIS';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
-
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 local license = spdx.proprietary;
 local template = import 'templates/MODIS_006_MCD19A2_GRANULES.libsonnet';
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
 
 {
   stac_version: ee_const.stac_version,
@@ -22,8 +20,9 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'MCD19A2.006: Terra & Aqua MAIAC Land Aerosol Optical Depth Daily 1km',
-  version: 'V006',
+  title: 'MCD19A2.006: Terra & Aqua MAIAC Land Aerosol Optical Depth Daily 1km [deprecated]',
+  deprecated: true,
+  version: version,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
     The MCD19A2 V6 data product is a MODIS Terra and Aqua combined Multi-angle
@@ -45,7 +44,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
       rel: ee_const.rel.cite_as,
       href: 'https://doi.org/10.5067/MODIS/MCD19A2.006',
     },
-  ],
+  ] + version_config.version_links,
   keywords: [
     'aerosol',
     'aod',
@@ -61,12 +60,12 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
   ],
   providers: [
     ee.producer_provider('NASA LP DAAC at the USGS EROS Center', 'https://doi.org/10.5067/MODIS/MCD19A2.006'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   'gee:provider_ids': [
     'C1000000505-LPDAAC_ECS',
   ],
-  extent: ee.extent_global('2000-02-26T00:00:00Z', null),
+  extent: ee.extent_global('2000-02-26T00:00:00Z', '2023-02-17T00:00:00Z'),
   summaries: template.summaries {
     platform: [
       'Aqua',

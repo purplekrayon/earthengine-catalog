@@ -1,20 +1,21 @@
 local id = 'NASA_USDA/HSL/SMAP_soil_moisture';
-local successor_id = 'NASA_USDA/HSL/SMAP10KM_soil_moisture';
+local successor_id = 'NASA/SMAP/SPL4SMGP/007';
 local subdir = 'NASA_USDA';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.proprietary;
 
 local basename = std.strReplace(id, '/', '_');
 local successor_basename = std.strReplace(successor_id, '/', '_');
+local successor_filename = successor_basename + '.json';
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
 local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
+local successor_url =  ee_const.catalog_base + 'NASA/' + successor_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -58,8 +59,7 @@ local self_url = catalog_subdir_url + base_filename;
   |||,
   license: license.id,
   links: ee.standardLinks(subdir, id) + [
-    ee.link.successor(
-        successor_id, catalog_subdir_url + successor_basename + '.json'),
+    ee.link.successor(successor_id, successor_url)
   ],
   keywords: [
     'geophysical',
@@ -83,27 +83,27 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'ssm',
         description: 'Surface soil moisture',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'susm',
         description: 'Subsurface soil moisture',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'smp',
         description: 'Soil moisture profile',
-        'gee:units': 'fraction',
+        'gee:units': units.unspecified_fraction,
       },
       {
         name: 'ssma',
         description: 'Surface soil moisture anomaly',
-        'gee:units': '-',
+        'gee:units': units.dimensionless,
       },
       {
         name: 'susma',
         description: 'Subsurface soil moisture anomaly',
-        'gee:units': '-',
+        'gee:units': units.dimensionless,
       },
     ],
     'gee:visualizations': [
@@ -228,9 +228,9 @@ local self_url = catalog_subdir_url + base_filename;
   'gee:terms_of_use': |||
     This dataset is in the public domain and is available
     without restriction on use and distribution. See [NASA's
-    Earth Science Data & Information Policy](https://science.nasa.gov/earth-science/earth-science-data/data-information-policy)
+    Earth Science Data & Information Policy](https://www.earthdata.nasa.gov/engage/open-data-services-and-software/data-and-information-policy)
     for additional information.
   |||,
   'gee:user_uploaded': true,
-  version: ee_const.version_unknown,
+   version: ee_const.version_unknown,
 }

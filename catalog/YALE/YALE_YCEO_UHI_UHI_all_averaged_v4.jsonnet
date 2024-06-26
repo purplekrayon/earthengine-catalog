@@ -4,15 +4,13 @@ local subdir = 'YALE';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.cc_by_4_0;
 
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -96,32 +94,32 @@ local self_url = catalog_subdir_url + base_filename;
       {
         name: 'all_daytime_UHI',
         description: 'All Daytime UHI',
-        'gee:units': 'degree C',
+        'gee:units': units.celsius,
       },
       {
         name: 'all_nighttime_UHI',
         description: 'All Nighttime UHI',
-        'gee:units': 'degree C',
+        'gee:units': units.celsius,
       },
       {
         name: 'summer_daytime_UHI',
         description: 'summer Daytime UHI',
-        'gee:units': 'degree C',
+        'gee:units': units.celsius,
       },
       {
         name: 'summer_nighttime_UHI',
         description: 'Summer Nighttime UHI',
-        'gee:units': 'degree C',
+        'gee:units': units.celsius,
       },
       {
         name: 'winter_daytime_UHI',
         description: 'Winter Daytime UHI',
-        'gee:units': 'degree C',
+        'gee:units': units.celsius,
       },
       {
         name: 'winter_nighttime_UHI',
         description: 'Winter Nighttime UHI',
-        'gee:units': 'degree C',
+        'gee:units': units.celsius,
       },
     ],
     'gee:visualizations': [
@@ -141,14 +139,14 @@ local self_url = catalog_subdir_url + base_filename;
               7.5,
             ],
             palette: [
-              '#313695',
-              '#74add1',
-              '#fed976',
-              '#feb24c',
-              '#fd8d3c',
-              '#fc4e2a',
-              '#e31a1c',
-              '#b10026',
+              '313695',
+              '74add1',
+              'fed976',
+              'feb24c',
+              'fd8d3c',
+              'fc4e2a',
+              'e31a1c',
+              'b10026',
             ],
             bands: [
               'all_daytime_UHI',

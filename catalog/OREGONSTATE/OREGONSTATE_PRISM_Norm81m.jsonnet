@@ -4,11 +4,12 @@ local subdir = 'OREGONSTATE';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 local versions = import 'versions.libsonnet';
 local prism = import 'OREGONSTATE_PRISM_Norm.libsonnet';
 
-local version = '81m';
-local version_config = versions(subdir, prism.versions, version);
+local version_config = versions(subdir, prism.versions, id);
+local version = version_config.version;
 
 local license = spdx.proprietary;
 
@@ -24,7 +25,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     ee_const.ext_sci,
     ee_const.ext_ver,
   ],
-  id: version_config.id,
+  id: id,
   version: version,
   title: 'PRISM Long-Term Average Climate Dataset Norm81m [deprecated]',
   deprecated: true,
@@ -44,7 +45,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     Spatial Climate Datasets](https://www.prism.oregonstate.edu/documents/PRISM_datasets.pdf).
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, version_config.id) + [
+  links: ee.standardLinks(subdir, id) + [
     ee.link.license(prism.license_link)
   ] + version_config.version_links,
   keywords: [
@@ -99,37 +100,37 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'ppt',
         description: '30 Year average of monthly total precipitation (including rain and melted snow)',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'tmean',
         description: '30 Year average of monthly mean temperature (calculated as (tmin+tmax)/2)',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'tmin',
         description: '30 Year average of monthly minimum temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'tmax',
         description: '30 Year average of monthly maximum temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'tdmean',
         description: '30 Year average of monthly mean dew point temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'vpdmin',
         description: '30 Year average of monthly minimum vapor pressure deficit',
-        'gee:units': 'hPa',
+        'gee:units': units.hectopascal,
       },
       {
         name: 'vpdmax',
         description: '30 Year average of monthly maximum vapor pressure deficit',
-        'gee:units': 'hPa',
+        'gee:units': units.hectopascal,
       },
     ],
     'gee:visualizations': [

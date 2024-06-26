@@ -33,7 +33,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
     The DEM is formed from spatio-temporal fits to elevation
     measurements accumulated within 1, 2, and 5 km grid cells,
     and is posted at the modal resolution of 1 km. The median
-    and root mean square difference between the DEM and 2.3*10⁷
+    and root mean square difference between the DEM and 2.3*10&#8311;
     airborne laser altimeter measurements acquired during
     NASA Operation IceBridge campaigns are -0.30 and 13.50 m,
     respectively.
@@ -72,7 +72,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'elevation',
         description: 'Antarctic ice sheet and ice shelf elevation.',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'data_composition',
@@ -85,17 +85,17 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           },
           {
             value: 1,
-            color: 'CBCBCB',
+            color: 'cbcbcb',
             description: '1 km fit',
           },
           {
             value: 2,
-            color: '377EB7',
+            color: '377eb7',
             description: 'resampled 2 km fit',
           },
           {
             value: 3,
-            color: 'E2191B',
+            color: 'e2191b',
             description: 'resampled 5 km fit',
           },
         ],
@@ -103,12 +103,12 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'slope',
         description: 'Slope derived from elevation gradient.',
-        'gee:units': 'degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'z_smoothed',
         description: 'Smoothed version of elevation model using a median filter.',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
       {
         name: 'z_uncertainty',
@@ -117,7 +117,7 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
           residuals in observed grid cells and the kriging variance error
           in interpolated grid cells.
         |||,
-        'gee:units': units.meters,
+        'gee:units': units.meter,
       },
     ],
     'gee:visualizations': [

@@ -1,3 +1,4 @@
+local cds_notice = import 'cds_notice.libsonnet';
 local units = import 'units.libsonnet';
 
 local meters = 'm';
@@ -5,7 +6,8 @@ local meters_eq = 'm of water equivalent';
 local flux = 'J/m^2';
 
 {
-  description: |||
+  description: cds_notice.body + |||
+
     ERA5-Land is a reanalysis dataset providing a consistent view of the
     evolution of land variables over several decades at an enhanced resolution
     compared to ERA5. ERA5-Land has been produced by replaying the land
@@ -16,6 +18,7 @@ local flux = 'J/m^2';
     climate of the past. This dataset includes all 50 variables as available on
     CDS.
   |||,
+  min_max: [{key:'min', value:'minimum'}, {key:'max', value:'maximum'}],
   keywords: [
     'cds',
     'climate',
@@ -266,7 +269,7 @@ local flux = 'J/m^2';
         layer over the uppermost soil level. The snow may cover all or part of
         the grid box.
       |||,
-      units: 'kg/m^3',
+      units: units.density_si,
     },
     {
       name: 'snow_depth',
@@ -343,7 +346,7 @@ local flux = 'J/m^2';
         is associated with the soil texture (or classification), soil depth,
         and the underlying groundwater level.
       |||,
-      units: 'm3/m3',
+      units: units.volume_fraction,
     },
     {
       name: 'volumetric_soil_water_layer_2',
@@ -351,7 +354,7 @@ local flux = 'J/m^2';
         Volume of water in soil layer 2 (7 -28 cm) of the ECMWF Integrated
         Forecasting System.
       |||,
-      units: 'm3/m3',
+      units: units.volume_fraction,
     },
     {
       name: 'volumetric_soil_water_layer_3',
@@ -359,7 +362,7 @@ local flux = 'J/m^2';
         Volume of water in soil layer 3 (28-100 cm) of the ECMWF Integrated
         Forecasting System.
       |||,
-      units: 'm3/m3',
+      units: units.volume_fraction,
     },
     {
       name: 'volumetric_soil_water_layer_4',
@@ -367,7 +370,7 @@ local flux = 'J/m^2';
         Volume of water in soil layer 4 (100-289 cm) of the ECMWF Integrated
         Forecasting System.
       |||,
-      units: 'm3/m3',
+      units: units.volume_fraction,
     },
     {
       name: 'forecast_albedo',
@@ -646,7 +649,7 @@ local flux = 'J/m^2';
         direction of the horizontal 10m
         wind.
       |||,
-      units: 'm/s',
+      units: units.velocity_si,
     },
     {
       name: 'v_component_of_wind_10m',
@@ -661,7 +664,7 @@ local flux = 'J/m^2';
         combined with the U component of 10m wind to give the speed and
         direction of the horizontal 10m wind.
       |||,
-      units: 'm/s',
+      units: units.velocity_si,
     },
     {
       name: 'surface_pressure',
@@ -678,7 +681,7 @@ local flux = 'J/m^2';
         pressure is often measured in hPa and sometimes is presented
         in the old units of millibars, mb (1 hPa = 1 mb = 100 Pa).
       |||,
-      units: 'Pa',
+      units: units.pascal,
     },
     {
       name: 'total_precipitation',
@@ -708,7 +711,7 @@ local flux = 'J/m^2';
         One-half of the total green leaf area per unit horizontal ground
         surface area for high vegetation type.
       |||,
-      units: 'm^2/m^2',
+      units: units.area_fraction,
     },
     {
       name: 'leaf_area_index_low_vegetation',
@@ -716,7 +719,7 @@ local flux = 'J/m^2';
         One-half of the total green leaf area per unit horizontal ground
         surface area for low vegetation type.
       |||,
-      units: 'm^2/m^2',
+      units: units.area_fraction,
     },
   ],
   visualizations: [
@@ -736,24 +739,24 @@ local flux = 'J/m^2';
             320.0,
           ],
           palette: [
-            '#000080',
-            '#0000D9',
-            '#4000FF',
-            '#8000FF',
-            '#0080FF',
-            '#00FFFF',
-            '#00FF80',
-            '#80FF00',
-            '#DAFF00',
-            '#FFFF00',
-            '#FFF500',
-            '#FFDA00',
-            '#FFB000',
-            '#FFA400',
-            '#FF4F00',
-            '#FF2500',
-            '#FF0A00',
-            '#FF00FF',
+            '000080',
+            '0000d9',
+            '4000ff',
+            '8000ff',
+            '0080ff',
+            '00ffff',
+            '00ff80',
+            '80ff00',
+            'daff00',
+            'ffff00',
+            'fff500',
+            'ffda00',
+            'ffb000',
+            'ffa400',
+            'ff4f00',
+            'ff2500',
+            'ff0a00',
+            'ff00ff',
           ],
           bands: [
             'temperature_2m',
@@ -777,13 +780,13 @@ local flux = 'J/m^2';
             1150.0,
           ],
           palette: [
-            '#01FFFF',
-            '#058BFF',
-            '#0600FF',
-            '#DF00FF',
-            '#FF00FF',
-            '#FF8C00',
-            '#FF8C00',
+            '01ffff',
+            '058bff',
+            '0600ff',
+            'df00ff',
+            'ff00ff',
+            'ff8c00',
+            'ff8c00',
           ],
           bands: [
             'surface_pressure',
@@ -807,16 +810,16 @@ local flux = 'J/m^2';
             30.0,
           ],
           palette: [
-            '#FFFFFF',
-            '#FFFF71',
-            '#DEFF00',
-            '#9EFF00',
-            '#77B038',
-            '#007E55',
-            '#005F51',
-            '#004B51',
-            '#013A7B',
-            '#023AAD',
+            'ffffff',
+            'ffff71',
+            'deff00',
+            '9eff00',
+            '77b038',
+            '007e55',
+            '005f51',
+            '004b51',
+            '013a7b',
+            '023aad',
           ],
           bands: [
             'u_component_of_wind_10m',
@@ -835,12 +838,12 @@ local flux = 'J/m^2';
     Please acknowledge the use of ERA5-Land as stated in the
     [Copernicus C3S/CAMS License agreement](https://apps.ecmwf.int/datasets/licences/copernicus/):
 
-    - 5.1.2 Where the Licensee communicates or distributes Copernicus Products
+    - 5.1.1 Where the Licensee communicates or distributes Copernicus Products
     to the public, the Licensee shall inform the recipients of the source by
     using the following or any similar notice:
     'Generated using Copernicus Climate Change Service Information [Year]'.
 
-    - 5.1.3 Where the Licensee makes or contributes to a publication or
+    - 5.1.2 Where the Licensee makes or contributes to a publication or
     distribution containing adapted or modified Copernicus Products, the
     Licensee shall provide the following or any similar notice:
     'Contains modified Copernicus Climate Change Service Information [Year]';

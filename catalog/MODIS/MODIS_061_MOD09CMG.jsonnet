@@ -12,7 +12,6 @@ local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
 
 {
   stac_version: ee_const.stac_version,
@@ -23,8 +22,8 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'MOD09CMG.061 Surface Reflectance Daily L3 Global 0.05 Deg CMG',
-  version: 'V061',
+  title: 'MOD09CMG.061 Terra Surface Reflectance Daily L3 Global 0.05 Deg CMG',
+  version: '6.1',
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
     The MOD09CMG Version 6.1 product provides an estimate of the surface
@@ -63,7 +62,7 @@ local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
     ee.host_provider(self_ee_catalog_url),
   ],
   'gee:provider_ids': [
-    'C1621091621-LPDAAC_ECS',
+    'C2565788876-LPCLOUD',
   ],
   extent: ee.extent_global('2000-02-24T00:00:00Z', null),
   summaries: template.summaries {

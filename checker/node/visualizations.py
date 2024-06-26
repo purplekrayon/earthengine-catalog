@@ -35,7 +35,8 @@ The rules covered here in visualizations.py:
       latitude
     - the point must be inside of the bounding box declared by the collection's
       bounding box inside of the extent field
-    - the Zoom must be an integer greater than 0 and less than 20
+    - the Zoom must be an integer greater than 0 and less than 20.
+      However, zoom levels 0 and 20 are not useful starting points.
 
 Notes:
 - There is no STAC extension for gee:visualizations and the checker is currently
@@ -196,6 +197,8 @@ MISSING_LOOKAT = frozenset({
     'NASA_USDA/HSL/soil_moisture'
 })
 
+# Do not allow zoom levels of 0 and 20.
+_ZOOM_RANGE = [1, 19]
 
 def get_bbox(
     stac_data: dict[str, Any]) -> Optional[tuple[float, float, float, float]]:
@@ -250,7 +253,7 @@ class Check(stac.NodeCheck):
       yield cls.new_issue(node, f'{VISUALIZATIONS} must have at least 1 entry')
       return
 
-    if len(visualizations) > 4:
+    if len(visualizations) > 50:
       yield cls.new_issue(
           node, f'{VISUALIZATIONS} has too many entries: {len(visualizations)}')
 
@@ -266,8 +269,7 @@ class Check(stac.NodeCheck):
         display_name = visualization[DISPLAY_NAME]
         if not isinstance(display_name, str):
           yield cls.new_issue(node, f'{DISPLAY_NAME} must be a str')
-        # TODO(schwehr): Really, these should be less than 40 characters.
-        elif not re.fullmatch(r'[a-zA-Z][-_a-zA-Z0-9 .,:()%"/\[\]²<]{2,70}',
+        elif not re.fullmatch(r'[a-zA-Z][-_a-zA-Z0-9 .,:()%"/\[\]²<^]{2,70}',
                               display_name):
           yield cls.new_issue(node, f'Invalid {DISPLAY_NAME}: "{display_name}"')
 
@@ -295,20 +297,21 @@ class Check(stac.NodeCheck):
                     f'{LON} and {LAT} must be floats and {ZOOM} must be ' +
                     f'an int: {lon}, {lat}, {zoom}')
               else:
-                if lon < -180 or lon > 180:
+                if not -180 <= lon <= 180:
                   yield cls.new_issue(node, f'{LON} must be in [-180, 180]')
-                if lat < -90 or lat > 90:
+                if not -90 <= lat <= 90:
                   yield cls.new_issue(node, f'{LAT} must be in [-90, 90]')
-                if zoom < 0 or zoom > 20:
-                  yield cls.new_issue(node, f'{ZOOM} must be in [0, 20]')
+                if not _ZOOM_RANGE[0] <= zoom <= _ZOOM_RANGE[1]:
+                  yield cls.new_issue(
+                      node, f'{ZOOM} must be in {_ZOOM_RANGE}; found: {zoom}')
 
                 bbox = get_bbox(node.stac)
                 if bbox:
                   x1, y1, x2, y2 = bbox
-                  if lon < x1 or lon > x2:
-                    yield cls.new_issue(node, f'{LON} must be in extent')
-                  if lat < y1 or lat > y2:
-                    yield cls.new_issue(node, f'{LAT} must be in extent')
+                  if not x1 < lon < x2:
+                    yield cls.new_issue(node, f'{LON} must be in ({x1}..{x2})')
+                  if not y1 < lat < y2:
+                    yield cls.new_issue(node, f'{LAT} must be in ({y1}..{y2})')
 
         other_fields = [
             f for f in visualization if f not in (DISPLAY_NAME, LOOKAT)

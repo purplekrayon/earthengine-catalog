@@ -1,20 +1,16 @@
 local id = 'WorldPop/POP';
-local successor_id = 'WorldPop/GP/100m/pop';
+local versions = import 'versions.libsonnet';
+local version_table = import 'templates/pop_versions.libsonnet';
+
 local subdir = 'WorldPop';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local version_config = versions(subdir, version_table, id);
+local version = version_config.version;
 
 local license = spdx.cc_by_4_0;
-
-local basename = std.strReplace(id, '/', '_');
-local base_filename = basename + '.json';
-local successor_basename = std.strReplace(successor_id, '/', '_');
-local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -26,6 +22,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   id: id,
   title: 'WorldPop Project Population Data: Estimated Residential Population per 100x100m Grid Square [deprecated]',
+  version: version,
   deprecated: true,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
@@ -36,14 +33,14 @@ local self_url = catalog_subdir_url + base_filename;
     access population distribution datasets built using transparent and
     peer-reviewed approaches.
 
-    Full details on the methods and datasets used in constructing the
-    data, along with open access publications, are provided on the
-    [WorldPop website](https://www.worldpop.org/). In brief, recent census-based
+    Full details on the methods and datasets used in constructing the data,
+    along with open access publications, are provided on the [WorldPop
+    website](https://www.worldpop.org/). In brief, recent census-based
     population counts matched to their associated administrative units are
-    disaggregated to ≈100x100m grid cells through machine learning approaches
-    that exploit the relationships between population densities and a range of
-    geospatial covariate layers. The datasets depict estimated number of people
-    residing in each grid cell in 2010, 2015, and other years.
+    disaggregated to &asymp;100x100m grid cells through machine learning
+    approaches that exploit the relationships between population densities and a
+    range of geospatial covariate layers. The datasets depict estimated number
+    of people residing in each grid cell in 2010, 2015, and other years.
 
     Further WorldPop gridded datasets on population age structures,
     poverty, urban growth, and population dynamics are freely available on
@@ -53,10 +50,7 @@ local self_url = catalog_subdir_url + base_filename;
     funded by the Bill and Melinda Gates Foundation.
   |||,
   license: license.id,
-  links: ee.standardLinks(subdir, id) + [
-    ee.link.successor(
-        successor_id, catalog_subdir_url + successor_basename + '.json'),
-  ],
+  links: ee.standardLinks(subdir, id) + version_config.version_links,
   keywords: [
     'demography',
     'population',
@@ -64,7 +58,7 @@ local self_url = catalog_subdir_url + base_filename;
   ],
   providers: [
     ee.producer_provider('WorldPop', 'https://www.worldpop.org'),
-    ee.host_provider(self_ee_catalog_url),
+    ee.host_provider(version_config.ee_catalog_url),
   ],
   extent: ee.extent(-180.0, -59.94, 180.0, 54.08,
                     '2010-01-01T00:00:00Z', '2016-01-01T00:00:00Z'),
@@ -137,8 +131,7 @@ local self_url = catalog_subdir_url + base_filename;
         Forrest R. Stevens, Andrea E. Gaughan, Catherine Linard, Andrew J. Tatem,
         2015, High-resolution gridded population datasets for Latin America and the
         Caribbean in 2010, 2015, and 2020, Scientific Data,
-        [doi:10.1038/sdata.2015.45]
-        (https://doi.org/10.1038/sdata.2015.45)
+        [doi:10.1038/sdata.2015.45](https://doi.org/10.1038/sdata.2015.45)
       |||,
       doi: '10.1038/sdata.2015.45',
     },
@@ -163,5 +156,4 @@ local self_url = catalog_subdir_url + base_filename;
     and adapt the work for commercial and non-commercial purposes, without
     restriction, as long as clear attribution of the source is provided.
   |||,
-  version: ee_const.version_unknown,
 }

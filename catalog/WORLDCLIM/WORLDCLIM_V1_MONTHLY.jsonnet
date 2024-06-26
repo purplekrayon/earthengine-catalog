@@ -1,18 +1,17 @@
 local id = 'WORLDCLIM/V1/MONTHLY';
 local subdir = 'WORLDCLIM';
+local version = '1';
 
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.cc_by_sa_4_0;
 
 local basename = std.strReplace(id, '/', '_');
 local base_filename = basename + '.json';
 local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
-local catalog_subdir_url = ee_const.catalog_base + subdir + '/';
-local parent_url = catalog_subdir_url + 'catalog.json';
-local self_url = catalog_subdir_url + base_filename;
 
 {
   stac_version: ee_const.stac_version,
@@ -23,8 +22,8 @@ local self_url = catalog_subdir_url + base_filename;
     ee_const.ext_ver,
   ],
   id: id,
-  title: 'WorldClim Climatology V1',
-  version: 'V1',
+  title: 'WorldClim Climatology V' + version,
+  version: version,
   'gee:type': ee_const.gee_type.image_collection,
   description: |||
     WorldClim version 1 has average monthly global climate data for minimum,
@@ -49,7 +48,8 @@ local self_url = catalog_subdir_url + base_filename;
     'worldclim',
   ],
   providers: [
-    ee.producer_provider('University of California, Berkeley', 'https://www.worldclim.org/'),
+    ee.producer_provider(
+      'University of California, Berkeley', 'https://www.worldclim.org/'),
     ee.host_provider(self_ee_catalog_url),
   ],
   extent: ee.extent_global('1960-01-01T00:00:00Z', '1991-01-01T00:00:00Z'),
@@ -61,85 +61,51 @@ local self_url = catalog_subdir_url + base_filename;
         type: ee_const.var_type.double,
       },
     ],
-    gsd: [
-      927.67,
-    ],
+    gsd: [927.67],
     'eo:bands': [
       {
         name: 'tavg',
         description: 'Mean temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'tmin',
         description: 'Minimum temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'tmax',
         description: 'Maximum temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
         'gee:scale': 0.1,
       },
       {
         name: 'prec',
         description: 'Precipitation',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
     ],
     'gee:visualizations': [
       {
-        display_name: 'Mean Temperature',
-        lookat: {
-          lat: 52.48,
-          lon: 71.72,
-          zoom: 1,
-        },
+        display_name: 'Mean Temperature (C)',
+        lookat: {lat: 52.4, lon: 71.7, zoom: 3},
         image_visualization: {
           band_vis: {
-            min: [
-              -400.0,
-            ],
-            max: [
-              300.0,
-            ],
-            palette: [
-              'blue',
-              'purple',
-              'cyan',
-              'green',
-              'yellow',
-              'red',
-            ],
-            bands: [
-              'tavg',
-            ],
+            gain: [0.1],
+            min: [-40],
+            max: [30],
+            palette: ['blue', 'purple', 'cyan', 'green', 'yellow', 'red'],
+            bands: ['tavg'],
           },
         },
       },
     ],
-    tavg: {
-      minimum: -536.0,
-      maximum: 394.0,
-      'gee:estimated_range': true,
-    },
-    tmin: {
-      minimum: -573.0,
-      maximum: 325.0,
-      'gee:estimated_range': true,
-    },
-    tmax: {
-      minimum: -500.0,
-      maximum: 490.0,
-      'gee:estimated_range': true,
-    },
-    prec: {
-      minimum: 0.0,
-      maximum: 2949.0,
-      'gee:estimated_range': true,
-    },
+    tavg: {minimum: -53.6, maximum: 39.4, 'gee:estimated_range': true},
+    tmin: {minimum: -57.3, maximum: 32.5, 'gee:estimated_range': true},
+    tmax: {minimum: -50.0, maximum: 49.0, 'gee:estimated_range': true},
+    prec: {minimum: 0, maximum: 2949, 'gee:estimated_range': true},
   },
   'sci:citation': |||
     Hijmans, R.J., S.E. Cameron, J.L. Parra, P.G. Jones and A. Jarvis,

@@ -1,3 +1,5 @@
+local units = import 'units.libsonnet';
+
 {
   summaries: {
     gsd: [
@@ -110,7 +112,7 @@
       {
         name: 'BRDF_Albedo_LocalSolarNoon',
         description: 'Solar zenith angle of local solar noon',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
       },
       {
         name: 'BRDF_Albedo_ValidObs_Band1',
@@ -681,11 +683,7 @@
     'gee:visualizations': [
       {
         display_name: 'Default visualization',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: 6.746, lat: 46.529, zoom: 6},
         image_visualization: {
           band_vis: {
             min: [

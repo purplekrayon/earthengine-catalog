@@ -4,6 +4,7 @@ local subdir = 'OREGONSTATE';
 local ee_const = import 'earthengine_const.libsonnet';
 local ee = import 'earthengine.libsonnet';
 local spdx = import 'spdx.libsonnet';
+local units = import 'units.libsonnet';
 
 local license = spdx.proprietary;
 
@@ -120,37 +121,37 @@ local self_ee_catalog_url = ee_const.ee_catalog_url + basename;
       {
         name: 'ppt',
         description: 'Monthly total precipitation (including rain and melted snow)',
-        'gee:units': 'mm',
+        'gee:units': units.millimeter,
       },
       {
         name: 'tmean',
         description: 'Monthly average of daily mean temperature (calculated as (tmin+tmax)/2)',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'tmin',
         description: 'Monthly minimum temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'tmax',
         description: 'Monthly average of daily maximum temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'tdmean',
         description: 'Monthly average of daily mean dew point temperature',
-        'gee:units': '°C',
+        'gee:units': units.celsius,
       },
       {
         name: 'vpdmin',
         description: 'Monthly average of daily minimum vapor pressure deficit',
-        'gee:units': 'hPa',
+        'gee:units': units.hectopascal,
       },
       {
         name: 'vpdmax',
         description: 'Monthly average of daily maximum vapor pressure deficit',
-        'gee:units': 'hPa',
+        'gee:units': units.hectopascal,
       },
     ],
     'gee:visualizations': [

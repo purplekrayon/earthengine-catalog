@@ -108,9 +108,16 @@ class Check(stac.NodeCheck):
               name = band[NAME]
               if isinstance(name, str) and name:
                 keys_from_bands.add(name)
+                # A band name can have a dash, but its corresponding summary key
+                # cannot.
+                keys_from_bands.add(name.replace('-', '_'))
 
     all_keys = ALL_KEYS.union(keys_from_bands)
     extra_keys = sorted(keys.difference(all_keys))
     if extra_keys:
       message = ', '.join(extra_keys)
-      yield cls.new_issue(node, f'{SUMMARIES} has unexpected keys: {message}')
+      yield cls.new_issue(
+          node,
+          f'{SUMMARIES} has unexpected keys: {message}. Each key must be a band'
+          ' name.',
+      )

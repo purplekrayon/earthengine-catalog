@@ -8,6 +8,9 @@ local units = import 'units.libsonnet';
     extracts biophysical metrics from each GEDI waveform. These metrics
     are based on the directional gap probability profile derived from the L1B
     waveform.
+
+    The vertical step between foliage profile measurements
+    (known as dZ in GEDI documentation) is always 5 meters.
   |||,
   citation: |||
     GEDI L2B Canopy Cover and Vertical Profile Metrics Data Global Footprint
@@ -43,7 +46,7 @@ local units = import 'units.libsonnet';
         Transmit time of the shot, measured in seconds from the
         master_time_epoch since 2018-01-01
       |||,
-      'gee:units': 'Seconds',
+      'gee:units': 'seconds',
       type:: ee_const.var_type.double,
     },
     {
@@ -63,7 +66,7 @@ local units = import 'units.libsonnet';
         Azimuth of the unit pointing vector for the laser in the local ENU
         frame measured from North and positive towards East.
       |||,
-      'gee:units': 'radians',
+      'gee:units': units.radian,
       type:: ee_const.var_type.int,
     },
     {
@@ -72,13 +75,13 @@ local units = import 'units.libsonnet';
         Elevation of the unit pointing vector for the laser in the local ENU
         frame measured from East-North plane and positive towards Up.
       |||,
-      'gee:units': 'radians',
+      'gee:units': units.radian,
       type:: ee_const.var_type.int,
     },
     {
       name: 'pai',
       description: 'Total Plant Area Index',
-      'gee:units': 'm^2/m^2',
+      'gee:units': units.area_fraction,
       type:: ee_const.var_type.int,
     },
     {
@@ -98,7 +101,11 @@ local units = import 'units.libsonnet';
     },
     {
       name: 'sensitivity',
-      description: 'Maxmimum canopy cover that can be penetrated',
+      description: |||
+          Maxmimum canopy cover that can be penetrated. Valid range is [0, 1].
+          Values outside of this range may be present but must be ignored.
+          They represent noise and non-land surface waveforms.
+      |||,
       type:: ee_const.var_type.int,
     },
     {
@@ -108,7 +115,7 @@ local units = import 'units.libsonnet';
         position in the local ENU frame measured from North and is positive
         towards East.
       |||,
-      'gee:units': 'Degrees',
+      'gee:units': units.degree,
       type:: ee_const.var_type.int,
     },
     {
@@ -118,7 +125,7 @@ local units = import 'units.libsonnet';
         position in the local ENU frame measured from the East-North plane and
         is positive Up.
       |||,
-      'gee:units': 'Degrees',
+      'gee:units': units.degree,
       type:: ee_const.var_type.int,
     },
     gedi_l2a.shot_number,
@@ -141,7 +148,7 @@ local units = import 'units.libsonnet';
     {
       name: 'pai_z' + step,
       description: 'Plant Area Index profile in ' + step + ' m&sup2;/m&sup2;',
-      'gee:units': 'm^2/m^2',
+      'gee:units': units.area_fraction,
       type:: ee_const.var_type.int,
     }
     for step in std.range(0, 30)

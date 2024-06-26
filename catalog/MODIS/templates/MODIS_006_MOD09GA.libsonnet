@@ -237,35 +237,35 @@ local units = import 'units.libsonnet';
       {
         name: 'SensorZenith',
         description: 'Sensor zenith angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         gsd: 1000.0,
         'gee:scale': 0.01,
       },
       {
         name: 'SensorAzimuth',
         description: 'Sensor azimuth angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         gsd: 1000.0,
         'gee:scale': 0.01,
       },
       {
         name: 'Range',
         description: 'Distance to sensor',
-        'gee:units': units.meters,
+        'gee:units': units.meter,
         gsd: 1000.0,
         'gee:scale': 25.0,
       },
       {
         name: 'SolarZenith',
         description: 'Solar zenith angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         gsd: 1000.0,
         'gee:scale': 0.01,
       },
       {
         name: 'SolarAzimuth',
         description: 'Solar azimuth angle',
-        'gee:units': 'Degrees',
+        'gee:units': units.degree,
         gsd: 1000.0,
         'gee:scale': 0.01,
       },
@@ -976,11 +976,7 @@ local units = import 'units.libsonnet';
     'gee:visualizations': [
       {
         display_name: 'True color',
-        lookat: {
-          lon: 0,
-          lat: 0,
-          zoom: 0,
-        },
+        lookat: {lon: -7.03, lat: 31.05, zoom: 2},
         image_visualization: {
           band_vis: {
             min: [

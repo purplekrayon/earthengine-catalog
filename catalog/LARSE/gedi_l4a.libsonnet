@@ -59,7 +59,7 @@ local units = import 'units.libsonnet';
     {
       name: 'agbd',
       description: 'Predicted aboveground biomass density',
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
@@ -67,7 +67,7 @@ local units = import 'units.libsonnet';
       description: |||
         Lower prediction interval (see "alpha" attribute for the level)
       |||,
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
@@ -75,7 +75,7 @@ local units = import 'units.libsonnet';
       description: |||
         Upper prediction interval (see "alpha" attribute for the level)
       |||,
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
@@ -83,7 +83,7 @@ local units = import 'units.libsonnet';
       description: |||
         Aboveground biomass density prediction standard error
       |||,
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
@@ -94,15 +94,16 @@ local units = import 'units.libsonnet';
     {
       name: 'agbd_t_se',
       description: |||
-        The L4A algorithm is run if this flag is set to 1. This flag selects
-        data that have sufficient waveform fidelity for AGBD estimation.
+        Model prediction standard error in fit units (needed for calculation of
+        custom prediction intervals)
       |||,
       type:: ee_const.var_type.int,
     },
     {
       name: 'algorithm_run_flag',
       description: |||
-        Aboveground biomass density prediction standard error
+        The L4A algorithm is run if this flag is set to 1. This flag selects
+        data that have sufficient waveform fidelity for AGBD estimation.
       |||,
       type:: ee_const.var_type.int,
     },
@@ -127,7 +128,7 @@ local units = import 'units.libsonnet';
     {
       name: 'delta_time',
       description: 'Time since Jan 1 00:00 2018',
-      'gee:units': 'Seconds',
+      'gee:units': 'seconds',
       type:: ee_const.var_type.int,
     },
     {
@@ -135,7 +136,7 @@ local units = import 'units.libsonnet';
       description: |||
         Elevation of center of lowest mode relative to reference ellipsoid
       |||,
-      'gee:units': units.meters,
+      'gee:units': units.meter,
       type:: ee_const.var_type.int,
     },
     {
@@ -155,13 +156,13 @@ local units = import 'units.libsonnet';
     {
       name: 'lat_lowestmode',
       description: 'Latitude of center of lowest mode',
-      'gee:units': 'degrees',
+      'gee:units': units.degree,
       type:: ee_const.var_type.int,
     },
     {
       name: 'lon_lowestmode',
       description: 'Longitude of center of lowest mode',
-      'gee:units': 'degrees',
+      'gee:units': units.degree,
       type:: ee_const.var_type.int,
     },
     {
@@ -170,7 +171,7 @@ local units = import 'units.libsonnet';
         Master time, fractional part. master_int+master_frac is equivalent
         to /BEAMXXXX/delta_time
       |||,
-      'gee:units': 'Seconds',
+      'gee:units': 'seconds',
       type:: ee_const.var_type.int,
     },
     {
@@ -179,7 +180,7 @@ local units = import 'units.libsonnet';
         Master time, integer part. Seconds since master_time_epoch.
         master_int+master_frac is equivalent to /BEAMXXXX/delta_time',
       |||,
-      'gee:units': 'Seconds',
+      'gee:units': 'seconds',
       type:: ee_const.var_type.int,
     },
     {
@@ -232,7 +233,7 @@ local units = import 'units.libsonnet';
     {
       name: 'solar_elevation',
       description: 'Solar elevation angle',
-      'gee:units': 'degrees',
+      'gee:units': units.degree,
       type:: ee_const.var_type.int,
     },
     {
@@ -270,19 +271,19 @@ local units = import 'units.libsonnet';
       description: |||
         Above ground biomass density; Geolocation latitude lowestmode
       |||,
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
       name: 'agbd_pi_lower_aN',
       description: 'Above ground biomass density lower prediction interval',
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
       name: 'agbd_pi_upper_aN',
       description: 'Above ground biomass density upper prediction interval',
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
@@ -290,7 +291,7 @@ local units = import 'units.libsonnet';
       description: |||
         Aboveground biomass density prediction standard error
       |||,
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
@@ -298,19 +299,19 @@ local units = import 'units.libsonnet';
       description: |||
         Aboveground biomass density model prediction in transform space
       |||,
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
       name: 'agbd_t_pi_lower_aN',
       description: 'Lower prediction interval in transform space',
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
       name: 'agbd_t_pi_upper_aN',
       description: 'Upper prediction interval in transform space',
-      'gee:units': 'Mg/ha',
+      'gee:units': units.area_density_megagrams_per_hectare,
       type:: ee_const.var_type.int,
     },
     {
@@ -366,19 +367,19 @@ local units = import 'units.libsonnet';
       description: |||
         Elevation of center of lowest mode relative to the reference ellipsoid
       |||,
-      'gee:units': units.meters,
+      'gee:units': units.meter,
       type:: ee_const.var_type.int,
     },
     {
       name: 'lat_lowestmode_aN',
       description: 'Latitude of center of lowest mode',
-      'gee:units': 'degrees',
+      'gee:units': units.degree,
       type:: ee_const.var_type.int,
     },
     {
       name: 'lon_lowestmode_aN',
       description: 'Longitude of center of lowest mode',
-      'gee:units': 'degrees',
+      'gee:units': units.degree,
       type:: ee_const.var_type.int,
     },
     {
@@ -460,6 +461,7 @@ local units = import 'units.libsonnet';
         MODIS MCD12Q1v006 product. Values follow the Land Cover Type 5
         Classification scheme.
       |||,
+      // TODO(schwehr): Use gee:classes
       type:: ee_const.var_type.int,
     },
     {
@@ -469,6 +471,7 @@ local units = import 'units.libsonnet';
         2=North Asia, 3=Australasia, 4=Africa, 5=South Asia, 6=South America,
         7=North America).
       |||,
+      // TODO(schwehr): Use gee:classes
       type:: ee_const.var_type.int,
     },
     {
@@ -477,7 +480,7 @@ local units = import 'units.libsonnet';
         The focal window size used to calculate urban_proportion.
         Values are 3 (3x3 pixel window size) or 5 (5x5 pixel window size).
       |||,
-      'gee:units': 'pixels',
+      'gee:units': units.pixel,
       type:: ee_const.var_type.int,
     },
     {
@@ -496,7 +499,7 @@ local units = import 'units.libsonnet';
     This dataset is in the public domain and is available
     without restriction on use and distribution. See [NASA's
     Earth Science Data & Information Policy]
-    (https://science.nasa.gov/earth-science/earth-science-data/data-information-policy)
+    (https://www.earthdata.nasa.gov/engage/open-data-services-and-software/data-and-information-policy)
     for additional information.
   |||,
 }
